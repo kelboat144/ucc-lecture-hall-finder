@@ -1,0 +1,164 @@
+hall,day,start,end,course,programme
+CALC 6,Friday,06:30,09:30,MUS 301,BA Music L300
+NLT 1,Friday,06:30,07:30,FIS 406,BSc Fisheries and Aquatic Sciences L400
+NLT 15,Friday,06:30,07:30,REL 308,BA Religious Studies L300
+SWLT 11,Friday,06:30,08:30,REL 109,BA Religious Studies L100
+SWLT 12,Friday,06:30,07:30,LAW 307,LLB Law L300
+CALC 10,Friday,07:30,09:30,HTM 408,BSc Hospitality Management L400
+NLT 15,Friday,07:30,08:30,FIS 305,BSc Fisheries and Aquatic Sciences L300
+NLT 16,Friday,07:30,09:30,REL 207,BA Religious Studies L200
+SWLT 19,Friday,07:30,09:30,LAW 205,LLB Law L200
+CALC 8,Friday,08:30,11:30,MUS 408,BA Music L400
+NLT 11,Friday,08:30,09:30,REL 404,BA Religious Studies L400
+SWLT 11,Friday,08:30,11:30,LAW 304,LLB Law L300
+SWLT 3,Friday,08:30,09:30,HTM 105,BSc Hospitality Management L100
+SWLT 6,Friday,08:30,11:30,LAW 106,LLB Law L100
+CALC 10,Friday,09:30,11:30,FIS 203,BSc Fisheries and Aquatic Sciences L200
+LT 12,Friday,09:30,11:30,REL 406,BA Religious Studies L400
+LT 20,Friday,09:30,11:30,MUS 301,BA Music L300
+NLT 11,Friday,09:30,10:30,REL 207,BA Religious Studies L200
+NLT 8,Friday,09:30,11:30,HTM 301,BSc Hospitality Management L300
+LT 6,Friday,10:30,12:30,LAW 209,LLB Law L200
+CALC 3,Friday,11:30,14:30,MUS 207,BA Music L200
+LT 14,Friday,11:30,12:30,HTM 108,BSc Hospitality Management L100
+LT 18,Friday,11:30,13:30,MUS 403,BA Music L400
+NLT 1,Friday,11:30,13:30,FIS 406,BSc Fisheries and Aquatic Sciences L400
+SWLT 19,Friday,11:30,13:30,HTM 301,BSc Hospitality Management L300
+LT 14,Friday,12:30,14:30,HTM 105,BSc Hospitality Management L100
+SWLT 1,Friday,13:30,15:30,FIS 206,BSc Fisheries and Aquatic Sciences L200
+SWLT 7,Friday,14:30,16:30,MUS 308,BA Music L300
+LT 18,Friday,16:30,18:30,LAW 309,LLB Law L300
+CALC 7,Friday,17:30,18:30,MUS 309,BA Music L300
+LT 1,Monday,06:30,08:30,LAW 409,LLB Law L400
+LT 11,Monday,06:30,08:30,HTM 209,BSc Hospitality Management L200
+LT 22,Monday,06:30,07:30,REL 304,BA Religious Studies L300
+NLT 11,Monday,06:30,07:30,LAW 202,LLB Law L200
+SWLT 2,Monday,06:30,07:30,HTM 103,BSc Hospitality Management L100
+LT 13,Monday,07:30,08:30,MUS 304,BA Music L300
+LT 2,Monday,07:30,09:30,LAW 102,LLB Law L100
+LT 5,Monday,07:30,08:30,REL 406,BA Religious Studies L400
+SWLT 1,Monday,07:30,09:30,REL 107,BA Religious Studies L100
+SWLT 15,Monday,07:30,09:30,REL 207,BA Religious Studies L200
+SWLT 18,Monday,07:30,09:30,HTM 101,BSc Hospitality Management L100
+CALC 1,Monday,08:30,11:30,HTM 208,BSc Hospitality Management L200
+CALC 5,Monday,08:30,10:30,HTM 408,BSc Hospitality Management L400
+LT 1,Monday,08:30,09:30,FIS 106,BSc Fisheries and Aquatic Sciences L100
+LT 21,Monday,08:30,10:30,LAW 309,LLB Law L300
+NLT 1,Monday,08:30,10:30,LAW 402,LLB Law L400
+NLT 17,Monday,08:30,11:30,FIS 302,BSc Fisheries and Aquatic Sciences L300
+SWLT 11,Monday,08:30,10:30,LAW 209,LLB Law L200
+SWLT 6,Monday,08:30,10:30,MUS 205,BA Music L200
+SWLT 9,Monday,08:30,11:30,FIS 208,BSc Fisheries and Aquatic Sciences L200
+CALC 9,Monday,10:30,11:30,MUS 308,BA Music L300
+NLT 6,Monday,10:30,11:30,MUS 207,BA Music L200
+SWLT 10,Monday,10:30,12:30,LAW 102,LLB Law L100
+LT 1,Monday,11:30,14:30,FIS 205,BSc Fisheries and Aquatic Sciences L200
+LT 16,Monday,11:30,13:30,HTM 201,BSc Hospitality Management L200
+LT 3,Monday,11:30,13:30,MUS 208,BA Music L200
+NLT 1,Monday,11:30,13:30,FIS 404,BSc Fisheries and Aquatic Sciences L400
+SWLT 13,Monday,11:30,13:30,REL 305,BA Religious Studies L300
+SWLT 14,Monday,12:30,13:30,HTM 307,BSc Hospitality Management L300
+LT 16,Monday,13:30,15:30,LAW 209,LLB Law L200
+NLT 16,Monday,13:30,15:30,FIS 407,BSc Fisheries and Aquatic Sciences L400
+NLT 2,Monday,13:30,15:30,REL 408,BA Religious Studies L400
+SWLT 14,Monday,13:30,15:30,FIS 301,BSc Fisheries and Aquatic Sciences L300
+CALC 5,Monday,14:30,17:30,LAW 409,LLB Law L400
+LT 22,Monday,14:30,15:30,LAW 308,LLB Law L300
+SWLT 11,Monday,15:30,18:30,REL 105,BA Religious Studies L100
+LT 8,Monday,16:30,18:30,REL 207,BA Religious Studies L200
+NLT 14,Thursday,06:30,07:30,MUS 104,BA Music L100
+CALC 10,Thursday,07:30,10:30,FIS 301,BSc Fisheries and Aquatic Sciences L300
+LT 16,Thursday,07:30,08:30,REL 208,BA Religious Studies L200
+LT 7,Thursday,07:30,10:30,MUS 403,BA Music L400
+LT 8,Thursday,07:30,10:30,REL 404,BA Religious Studies L400
+NLT 11,Thursday,07:30,08:30,HTM 105,BSc Hospitality Management L100
+SWLT 13,Thursday,07:30,09:30,FIS 106,BSc Fisheries and Aquatic Sciences L100
+SWLT 17,Thursday,08:30,09:30,HTM 101,BSc Hospitality Management L100
+NLT 15,Thursday,09:30,12:30,MUS 109,BA Music L100
+SWLT 11,Thursday,09:30,11:30,HTM 208,BSc Hospitality Management L200
+SWLT 17,Thursday,09:30,12:30,HTM 306,BSc Hospitality Management L300
+LT 7,Thursday,10:30,12:30,REL 201,BA Religious Studies L200
+SWLT 6,Thursday,10:30,12:30,FIS 208,BSc Fisheries and Aquatic Sciences L200
+CALC 10,Thursday,11:30,12:30,MUS 208,BA Music L200
+CALC 11,Thursday,11:30,13:30,LAW 407,LLB Law L400
+CALC 8,Thursday,11:30,12:30,LAW 203,LLB Law L200
+NLT 14,Thursday,11:30,13:30,FIS 302,BSc Fisheries and Aquatic Sciences L300
+SWLT 8,Thursday,11:30,13:30,REL 107,BA Religious Studies L100
+NLT 9,Thursday,12:30,13:30,MUS 203,BA Music L200
+LT 7,Thursday,13:30,15:30,REL 201,BA Religious Studies L200
+NLT 2,Thursday,13:30,16:30,FIS 104,BSc Fisheries and Aquatic Sciences L100
+NLT 8,Thursday,14:30,15:30,FIS 208,BSc Fisheries and Aquatic Sciences L200
+SWLT 11,Thursday,14:30,16:30,MUS 105,BA Music L100
+LT 22,Thursday,15:30,17:30,REL 308,BA Religious Studies L300
+LT 4,Thursday,15:30,16:30,HTM 108,BSc Hospitality Management L100
+LT 8,Thursday,15:30,16:30,MUS 304,BA Music L300
+NLT 9,Thursday,15:30,17:30,REL 209,BA Religious Studies L200
+SWLT 10,Thursday,15:30,17:30,MUS 201,BA Music L200
+CALC 1,Thursday,16:30,18:30,MUS 408,BA Music L400
+NLT 17,Thursday,16:30,18:30,MUS 105,BA Music L100
+SWLT 5,Thursday,16:30,19:30,MUS 304,BA Music L300
+NLT 7,Thursday,18:30,19:30,FIS 101,BSc Fisheries and Aquatic Sciences L100
+SWLT 11,Thursday,18:30,19:30,FIS 305,BSc Fisheries and Aquatic Sciences L300
+LT 1,Tuesday,06:30,08:30,MUS 203,BA Music L200
+NLT 3,Tuesday,06:30,07:30,REL 406,BA Religious Studies L400
+SWLT 4,Tuesday,06:30,07:30,FIS 205,BSc Fisheries and Aquatic Sciences L200
+LT 10,Tuesday,07:30,09:30,HTM 407,BSc Hospitality Management L400
+SWLT 17,Tuesday,07:30,08:30,REL 308,BA Religious Studies L300
+CALC 11,Tuesday,08:30,10:30,REL 409,BA Religious Studies L400
+CALC 7,Tuesday,08:30,10:30,FIS 208,BSc Fisheries and Aquatic Sciences L200
+SWLT 17,Tuesday,08:30,11:30,REL 103,BA Religious Studies L100
+SWLT 18,Tuesday,08:30,10:30,MUS 207,BA Music L200
+LT 14,Tuesday,09:30,11:30,HTM 208,BSc Hospitality Management L200
+LT 18,Tuesday,09:30,12:30,REL 305,BA Religious Studies L300
+LT 7,Tuesday,09:30,10:30,REL 201,BA Religious Studies L200
+NLT 10,Tuesday,09:30,12:30,MUS 403,BA Music L400
+NLT 17,Tuesday,10:30,12:30,FIS 206,BSc Fisheries and Aquatic Sciences L200
+LT 4,Tuesday,11:30,13:30,HTM 307,BSc Hospitality Management L300
+CALC 8,Tuesday,13:30,15:30,LAW 402,LLB Law L400
+LT 5,Tuesday,13:30,14:30,HTM 305,BSc Hospitality Management L300
+NLT 3,Tuesday,13:30,14:30,HTM 209,BSc Hospitality Management L200
+SWLT 12,Tuesday,13:30,15:30,REL 207,BA Religious Studies L200
+SWLT 18,Tuesday,13:30,16:30,FIS 306,BSc Fisheries and Aquatic Sciences L300
+NLT 17,Tuesday,14:30,15:30,LAW 202,LLB Law L200
+SWLT 14,Tuesday,14:30,15:30,MUS 308,BA Music L300
+SWLT 13,Tuesday,15:30,18:30,LAW 208,LLB Law L200
+SWLT 19,Tuesday,15:30,16:30,REL 205,BA Religious Studies L200
+LT 17,Tuesday,17:30,18:30,MUS 408,BA Music L400
+LT 8,Wednesday,06:30,07:30,MUS 104,BA Music L100
+SWLT 14,Wednesday,06:30,08:30,HTM 101,BSc Hospitality Management L100
+SWLT 7,Wednesday,06:30,08:30,MUS 303,BA Music L300
+CALC 2,Wednesday,07:30,08:30,LAW 401,LLB Law L400
+NLT 12,Wednesday,07:30,09:30,FIS 105,BSc Fisheries and Aquatic Sciences L100
+SWLT 12,Wednesday,07:30,08:30,LAW 308,LLB Law L300
+CALC 4,Wednesday,08:30,09:30,MUS 301,BA Music L300
+LT 17,Wednesday,08:30,10:30,LAW 401,LLB Law L400
+LT 18,Wednesday,08:30,09:30,FIS 302,BSc Fisheries and Aquatic Sciences L300
+SWLT 7,Wednesday,08:30,09:30,FIS 206,BSc Fisheries and Aquatic Sciences L200
+CALC 4,Wednesday,09:30,11:30,MUS 408,BA Music L400
+CALC 8,Wednesday,09:30,11:30,HTM 407,BSc Hospitality Management L400
+NLT 2,Wednesday,09:30,11:30,FIS 305,BSc Fisheries and Aquatic Sciences L300
+NLT 8,Wednesday,09:30,11:30,HTM 302,BSc Hospitality Management L300
+SWLT 17,Wednesday,09:30,10:30,FIS 101,BSc Fisheries and Aquatic Sciences L100
+CALC 1,Wednesday,10:30,11:30,LAW 409,LLB Law L400
+LT 10,Wednesday,10:30,12:30,MUS 203,BA Music L200
+LT 17,Wednesday,10:30,11:30,MUS 308,BA Music L300
+NLT 7,Wednesday,10:30,12:30,FIS 105,BSc Fisheries and Aquatic Sciences L100
+SWLT 11,Wednesday,10:30,13:30,REL 107,BA Religious Studies L100
+NLT 8,Wednesday,11:30,13:30,MUS 405,BA Music L400
+NLT 9,Wednesday,11:30,13:30,HTM 403,BSc Hospitality Management L400
+SWLT 18,Wednesday,11:30,13:30,REL 301,BA Religious Studies L300
+CALC 8,Wednesday,12:30,13:30,REL 406,BA Religious Studies L400
+NLT 3,Wednesday,13:30,15:30,REL 102,BA Religious Studies L100
+SWLT 12,Wednesday,13:30,15:30,MUS 309,BA Music L300
+SWLT 19,Wednesday,13:30,15:30,REL 304,BA Religious Studies L300
+LT 3,Wednesday,14:30,16:30,MUS 405,BA Music L400
+NLT 2,Wednesday,14:30,16:30,LAW 304,LLB Law L300
+NLT 7,Wednesday,14:30,16:30,REL 408,BA Religious Studies L400
+SWLT 15,Wednesday,14:30,15:30,HTM 305,BSc Hospitality Management L300
+SWLT 3,Wednesday,14:30,17:30,FIS 104,BSc Fisheries and Aquatic Sciences L100
+LT 20,Wednesday,15:30,16:30,LAW 202,LLB Law L200
+CALC 1,Wednesday,16:30,19:30,REL 409,BA Religious Studies L400
+LT 7,Wednesday,16:30,17:30,LAW 401,LLB Law L400
+NLT 10,Wednesday,16:30,19:30,FIS 403,BSc Fisheries and Aquatic Sciences L400
+NLT 3,Wednesday,16:30,17:30,HTM 209,BSc Hospitality Management L200
+SWLT 17,Wednesday,16:30,18:30,HTM 302,BSc Hospitality Management L300

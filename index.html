@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hall Finder · University of Cape Coast</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<section id="loginView" hidden>
+  <form id="loginForm" class="panel login" autocomplete="on">
+    <h1>Hall Finder</h1>
+    <p class="muted">University of Cape Coast lecture halls. Sign in with the account issued to you.</p>
+    <label>Username <input id="lu" autocomplete="username" required></label>
+    <label>Password <input id="lp" type="password" autocomplete="current-password" required></label>
+    <button class="primary" type="submit">Sign in</button>
+    <p class="msg" id="loginMsg" role="alert"></p>
+  </form>
+</section>
+
+<div id="appView" hidden>
+  <header class="bar">
+    <div><strong>Hall Finder</strong> <span class="muted" id="who"></span></div>
+    <nav id="nav"></nav>
+    <button id="logout" class="ghost">Sign out</button>
+  </header>
+  <main>
+    <section id="vFind">
+      <div class="panel grid">
+        <label>Date <input type="date" id="date"></label>
+        <label>Time <input type="time" id="time"></label>
+        <label>Hall group <select id="group"></select></label>
+        <label>Minimum seats <input type="number" id="seats" min="0" step="10" value="0"></label>
+        <label>Free for at least <select id="dur"><option value="0">Any length</option><option value="30">30 minutes</option><option value="60">1 hour</option><option value="120">2 hours</option></select></label>
+        <label>Find a hall <input type="search" id="q" placeholder="e.g. SWLT 7"></label>
+        <button id="now" class="ghost wide">Use current date and time</button>
+      </div>
+      <div class="tabs"><button id="tFree" class="on">Free</button><button id="tBusy">Booked</button><button id="tAll">All</button></div>
+      <p class="summary" id="summary"></p>
+      <div id="list"></div>
+    </section>
+
+    <section id="vMine" hidden>
+      <h2>Upcoming bookings</h2>
+      <div id="mine"></div>
+    </section>
+
+    <section id="vAdmin" hidden>
+      <div class="panel">
+        <h2>Add a user</h2>
+        <form id="userForm" class="grid">
+          <label>Full name <input id="un" required></label>
+          <label>Username <input id="uu" required></label>
+          <label>Role <select id="ur"><option value="rep">Programme rep</option><option value="admin">Administrator</option></select></label>
+          <label>Programme <input id="up" placeholder="BSc Computer Science L200"></label>
+          <label class="wide">Temporary password (8+ characters) <input id="upw" type="text" minlength="8" required></label>
+          <button class="primary wide" type="submit">Create user</button>
+          <p class="msg wide" id="userMsg"></p>
+        </form>
+        <div id="users"></div>
+      </div>
+      <div class="panel">
+        <h2>Timetable</h2>
+        <p class="muted">Upload one or many CSV files at once (hold Ctrl or Shift to select several) with the columns <code>hall, day, start, end, course, programme</code>. Example row: <code>SWLT 3, Monday, 08:00, 10:00, ECO 101, BA Economics L100</code>. A rep’s programme must match the text in this column exactly (capitals ignored) to release that class.</p>
+        <p id="ttCount" class="muted"></p>
+        <input type="file" id="ttFile" accept=".csv,text/csv" multiple>
+        <label class="inline"><input type="checkbox" id="ttReplace" checked> Replace the existing timetable</label>
+        <button class="primary" id="ttGo">Import timetable</button>
+        <p class="msg" id="ttMsg"></p>
+      </div>
+      <div class="panel">
+        <h2>Hall seat counts</h2>
+        <div id="halls" class="grid3"></div>
+      </div>
+    </section>
+
+    <section id="vAccount" hidden>
+      <form id="pwForm" class="panel narrow">
+        <h2>Change password</h2>
+        <label>Current password <input id="pc" type="password" autocomplete="current-password" required></label>
+        <label>New password (8+ characters) <input id="pn" type="password" autocomplete="new-password" minlength="8" required></label>
+        <button class="primary" type="submit">Update password</button>
+        <p class="msg" id="pwMsg"></p>
+      </form>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

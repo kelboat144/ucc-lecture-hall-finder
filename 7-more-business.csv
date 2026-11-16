@@ -1,0 +1,168 @@
+hall,day,start,end,course,programme
+LT 12,Friday,06:30,07:30,BFN 408,BCom Banking and Finance L400
+SWLT 17,Friday,06:30,08:30,HRM 307,BCom Human Resource Management L300
+SWLT 6,Friday,06:30,08:30,HRM 106,BCom Human Resource Management L100
+LT 3,Friday,07:30,09:30,BFN 101,BCom Banking and Finance L100
+NLT 5,Friday,07:30,08:30,ACC 301,BCom Accounting L300
+NLT 7,Friday,07:30,10:30,BFN 204,BCom Banking and Finance L200
+CALC 9,Friday,08:30,10:30,MGT 406,BSc Management L400
+LT 4,Friday,08:30,10:30,HRM 403,BCom Human Resource Management L400
+NLT 5,Friday,08:30,10:30,ACC 208,BCom Accounting L200
+SWLT 13,Friday,08:30,11:30,MGT 201,BSc Management L200
+SWLT 17,Friday,09:30,12:30,ACC 303,BCom Accounting L300
+SWLT 7,Friday,09:30,11:30,MKT 203,BCom Marketing L200
+LT 13,Friday,10:30,12:30,HRM 103,BCom Human Resource Management L100
+LT 12,Friday,11:30,12:30,MKT 201,BCom Marketing L200
+NLT 13,Friday,11:30,13:30,HRM 407,BCom Human Resource Management L400
+NLT 2,Friday,11:30,12:30,ACC 206,BCom Accounting L200
+SWLT 12,Friday,12:30,13:30,ACC 306,BCom Accounting L300
+SWLT 5,Friday,12:30,14:30,BFN 302,BCom Banking and Finance L300
+CALC 5,Friday,13:30,15:30,BFN 203,BCom Banking and Finance L200
+LT 20,Friday,14:30,16:30,HRM 205,BCom Human Resource Management L200
+NLT 10,Friday,14:30,15:30,MKT 201,BCom Marketing L200
+NLT 11,Friday,16:30,17:30,HRM 207,BCom Human Resource Management L200
+SWLT 9,Friday,16:30,18:30,ACC 203,BCom Accounting L200
+SWLT 14,Friday,18:30,19:30,MGT 206,BSc Management L200
+NLT 6,Monday,06:30,07:30,MGT 306,BSc Management L300
+NLT 8,Monday,06:30,08:30,MKT 308,BCom Marketing L300
+CALC 6,Monday,07:30,08:30,ACC 304,BCom Accounting L300
+CALC 7,Monday,07:30,10:30,BFN 205,BCom Banking and Finance L200
+LT 20,Monday,07:30,09:30,BFN 302,BCom Banking and Finance L300
+SWLT 8,Monday,07:30,09:30,MGT 302,BSc Management L300
+CALC 9,Monday,08:30,09:30,ACC 304,BCom Accounting L300
+NLT 6,Monday,08:30,10:30,MKT 403,BCom Marketing L400
+SWLT 17,Monday,08:30,11:30,ACC 204,BCom Accounting L200
+LT 2,Monday,09:30,11:30,ACC 102,BCom Accounting L100
+NLT 10,Monday,09:30,11:30,HRM 106,BCom Human Resource Management L100
+CALC 4,Monday,10:30,12:30,BFN 408,BCom Banking and Finance L400
+CALC 5,Monday,10:30,11:30,MGT 404,BSc Management L400
+NLT 9,Monday,10:30,12:30,MKT 404,BCom Marketing L400
+LT 17,Monday,11:30,13:30,MGT 105,BSc Management L100
+NLT 8,Monday,11:30,13:30,ACC 205,BCom Accounting L200
+SWLT 3,Monday,11:30,13:30,MKT 103,BCom Marketing L100
+SWLT 9,Monday,11:30,13:30,MKT 208,BCom Marketing L200
+CALC 2,Monday,12:30,13:30,MGT 201,BSc Management L200
+CALC 5,Monday,12:30,14:30,MKT 308,BCom Marketing L300
+CALC 6,Monday,12:30,14:30,BFN 406,BCom Banking and Finance L400
+LT 19,Monday,12:30,13:30,HRM 209,BCom Human Resource Management L200
+SWLT 4,Monday,12:30,14:30,BFN 201,BCom Banking and Finance L200
+CALC 11,Monday,13:30,15:30,ACC 402,BCom Accounting L400
+NLT 15,Monday,13:30,15:30,BFN 302,BCom Banking and Finance L300
+SWLT 11,Monday,13:30,14:30,MKT 201,BCom Marketing L200
+SWLT 16,Monday,13:30,16:30,ACC 102,BCom Accounting L100
+SWLT 8,Monday,13:30,15:30,ACC 205,BCom Accounting L200
+LT 1,Monday,14:30,17:30,MGT 308,BSc Management L300
+NLT 8,Monday,15:30,17:30,HRM 303,BCom Human Resource Management L300
+NLT 9,Monday,16:30,18:30,ACC 308,BCom Accounting L300
+SWLT 8,Monday,16:30,19:30,ACC 203,BCom Accounting L200
+SWLT 18,Monday,17:30,19:30,MGT 302,BSc Management L300
+LT 22,Monday,18:30,19:30,MGT 206,BSc Management L200
+SWLT 15,Monday,18:30,19:30,MKT 201,BCom Marketing L200
+LT 16,Thursday,06:30,07:30,MKT 308,BCom Marketing L300
+NLT 7,Thursday,06:30,08:30,ACC 406,BCom Accounting L400
+LT 13,Thursday,07:30,10:30,MKT 405,BCom Marketing L400
+NLT 17,Thursday,07:30,09:30,ACC 205,BCom Accounting L200
+SWLT 18,Thursday,07:30,08:30,HRM 209,BCom Human Resource Management L200
+SWLT 4,Thursday,07:30,10:30,MGT 205,BSc Management L200
+CALC 9,Thursday,08:30,11:30,HRM 406,BCom Human Resource Management L400
+LT 4,Thursday,08:30,11:30,BFN 205,BCom Banking and Finance L200
+CALC 1,Thursday,09:30,11:30,MGT 307,BSc Management L300
+LT 22,Thursday,09:30,11:30,BFN 307,BCom Banking and Finance L300
+SWLT 19,Thursday,09:30,10:30,HRM 307,BCom Human Resource Management L300
+LT 20,Thursday,10:30,11:30,MKT 204,BCom Marketing L200
+SWLT 10,Thursday,10:30,12:30,HRM 107,BCom Human Resource Management L100
+LT 1,Thursday,11:30,13:30,HRM 303,BCom Human Resource Management L300
+LT 12,Thursday,11:30,13:30,MKT 303,BCom Marketing L300
+NLT 7,Thursday,11:30,13:30,ACC 403,BCom Accounting L400
+SWLT 11,Thursday,11:30,14:30,ACC 308,BCom Accounting L300
+CALC 7,Thursday,12:30,13:30,MGT 308,BSc Management L300
+LT 2,Thursday,12:30,13:30,MKT 409,BCom Marketing L400
+SWLT 7,Thursday,12:30,13:30,BFN 301,BCom Banking and Finance L300
+NLT 9,Thursday,13:30,14:30,BFN 302,BCom Banking and Finance L300
+SWLT 10,Thursday,13:30,15:30,MKT 302,BCom Marketing L300
+CALC 2,Thursday,14:30,17:30,HRM 405,BCom Human Resource Management L400
+LT 9,Thursday,14:30,17:30,MGT 102,BSc Management L100
+NLT 1,Thursday,14:30,16:30,MGT 401,BSc Management L400
+SWLT 15,Thursday,14:30,16:30,ACC 304,BCom Accounting L300
+CALC 4,Thursday,15:30,17:30,MKT 204,BCom Marketing L200
+SWLT 18,Thursday,15:30,17:30,HRM 205,BCom Human Resource Management L200
+SWLT 3,Thursday,15:30,16:30,ACC 206,BCom Accounting L200
+LT 16,Thursday,16:30,17:30,HRM 107,BCom Human Resource Management L100
+LT 8,Thursday,16:30,18:30,ACC 402,BCom Accounting L400
+NLT 2,Thursday,16:30,17:30,ACC 301,BCom Accounting L300
+SWLT 1,Thursday,16:30,18:30,BFN 102,BCom Banking and Finance L100
+NLT 15,Thursday,17:30,19:30,MKT 203,BCom Marketing L200
+CALC 5,Tuesday,06:30,09:30,MGT 306,BSc Management L300
+LT 15,Tuesday,06:30,08:30,BFN 102,BCom Banking and Finance L100
+NLT 1,Tuesday,06:30,09:30,ACC 105,BCom Accounting L100
+NLT 11,Tuesday,06:30,08:30,MKT 303,BCom Marketing L300
+SWLT 1,Tuesday,06:30,07:30,HRM 208,BCom Human Resource Management L200
+CALC 10,Tuesday,07:30,09:30,HRM 303,BCom Human Resource Management L300
+NLT 4,Tuesday,07:30,10:30,ACC 308,BCom Accounting L300
+SWLT 5,Tuesday,07:30,09:30,MKT 205,BCom Marketing L200
+CALC 1,Tuesday,08:30,10:30,HRM 209,BCom Human Resource Management L200
+CALC 2,Tuesday,08:30,10:30,MGT 205,BSc Management L200
+LT 1,Tuesday,08:30,09:30,BFN 406,BCom Banking and Finance L400
+NLT 15,Tuesday,08:30,11:30,MGT 103,BSc Management L100
+SWLT 3,Tuesday,08:30,10:30,BFN 308,BCom Banking and Finance L300
+LT 1,Tuesday,09:30,10:30,HRM 307,BCom Human Resource Management L300
+LT 20,Tuesday,09:30,10:30,BFN 104,BCom Banking and Finance L100
+SWLT 2,Tuesday,09:30,10:30,MKT 203,BCom Marketing L200
+CALC 7,Tuesday,10:30,12:30,MKT 205,BCom Marketing L200
+CALC 8,Tuesday,10:30,12:30,MGT 401,BSc Management L400
+NLT 5,Tuesday,10:30,12:30,ACC 103,BCom Accounting L100
+CALC 10,Tuesday,11:30,14:30,BFN 301,BCom Banking and Finance L300
+CALC 11,Tuesday,11:30,12:30,MKT 404,BCom Marketing L400
+NLT 18,Tuesday,11:30,12:30,HRM 407,BCom Human Resource Management L400
+NLT 16,Tuesday,12:30,15:30,ACC 208,BCom Accounting L200
+SWLT 16,Tuesday,12:30,14:30,MGT 208,BSc Management L200
+SWLT 6,Tuesday,12:30,14:30,HRM 103,BCom Human Resource Management L100
+LT 15,Tuesday,13:30,15:30,MKT 407,BCom Marketing L400
+NLT 18,Tuesday,13:30,14:30,ACC 308,BCom Accounting L300
+CALC 7,Tuesday,14:30,16:30,HRM 302,BCom Human Resource Management L300
+LT 20,Tuesday,14:30,16:30,HRM 204,BCom Human Resource Management L200
+LT 22,Tuesday,14:30,15:30,MKT 208,BCom Marketing L200
+NLT 11,Tuesday,14:30,15:30,MKT 302,BCom Marketing L300
+NLT 3,Tuesday,14:30,17:30,HRM 404,BCom Human Resource Management L400
+SWLT 15,Tuesday,14:30,15:30,MGT 307,BSc Management L300
+NLT 11,Tuesday,15:30,17:30,HRM 104,BCom Human Resource Management L100
+SWLT 11,Tuesday,15:30,16:30,MKT 303,BCom Marketing L300
+SWLT 4,Tuesday,15:30,17:30,MGT 209,BSc Management L200
+NLT 2,Tuesday,16:30,18:30,BFN 206,BCom Banking and Finance L200
+LT 13,Wednesday,06:30,08:30,HRM 208,BCom Human Resource Management L200
+LT 18,Wednesday,06:30,07:30,MGT 401,BSc Management L400
+NLT 7,Wednesday,06:30,08:30,MKT 306,BCom Marketing L300
+NLT 11,Wednesday,07:30,08:30,BFN 204,BCom Banking and Finance L200
+NLT 15,Wednesday,07:30,09:30,BFN 301,BCom Banking and Finance L300
+LT 16,Wednesday,08:30,10:30,HRM 102,BCom Human Resource Management L100
+NLT 13,Wednesday,08:30,09:30,MGT 302,BSc Management L300
+SWLT 3,Wednesday,08:30,11:30,ACC 104,BCom Accounting L100
+CALC 3,Wednesday,09:30,11:30,MGT 306,BSc Management L300
+LT 15,Wednesday,09:30,10:30,MGT 206,BSc Management L200
+LT 19,Wednesday,09:30,11:30,HRM 302,BCom Human Resource Management L300
+NLT 14,Wednesday,09:30,12:30,MGT 402,BSc Management L400
+SWLT 5,Wednesday,09:30,10:30,MKT 104,BCom Marketing L100
+CALC 10,Wednesday,10:30,11:30,HRM 404,BCom Human Resource Management L400
+LT 16,Wednesday,10:30,11:30,BFN 104,BCom Banking and Finance L100
+LT 2,Wednesday,10:30,12:30,HRM 205,BCom Human Resource Management L200
+LT 8,Wednesday,10:30,12:30,MKT 101,BCom Marketing L100
+NLT 17,Wednesday,10:30,12:30,BFN 401,BCom Banking and Finance L400
+CALC 6,Wednesday,11:30,13:30,HRM 405,BCom Human Resource Management L400
+CALC 8,Wednesday,11:30,12:30,MKT 409,BCom Marketing L400
+LT 20,Wednesday,11:30,13:30,ACC 303,BCom Accounting L300
+LT 22,Wednesday,11:30,12:30,BFN 206,BCom Banking and Finance L200
+NLT 1,Wednesday,11:30,13:30,MGT 105,BSc Management L100
+NLT 4,Wednesday,11:30,12:30,BFN 104,BCom Banking and Finance L100
+SWLT 4,Wednesday,11:30,13:30,MGT 307,BSc Management L300
+CALC 7,Wednesday,12:30,14:30,MGT 402,BSc Management L400
+LT 1,Wednesday,12:30,13:30,MKT 201,BCom Marketing L200
+NLT 5,Wednesday,12:30,13:30,ACC 101,BCom Accounting L100
+CALC 9,Wednesday,13:30,15:30,ACC 206,BCom Accounting L200
+LT 15,Wednesday,13:30,14:30,MGT 209,BSc Management L200
+LT 22,Wednesday,13:30,16:30,MKT 308,BCom Marketing L300
+LT 4,Wednesday,13:30,14:30,MKT 403,BCom Marketing L400
+LT 8,Wednesday,13:30,15:30,HRM 403,BCom Human Resource Management L400
+NLT 10,Wednesday,13:30,15:30,MKT 109,BCom Marketing L100
+NLT 17,Wednesday,13:30,15:30,MGT 102,BSc Management L100
+NLT 13,Wednesday,14:30,16:30,BFN 104,BCom Banking and Finance L100
+SWLT 13,Wednesday,16:30,18:30,HRM 102,BCom Human Resource Management L100

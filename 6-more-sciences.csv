@@ -1,0 +1,242 @@
+hall,day,start,end,course,programme
+CALC 8,Friday,06:30,08:30,CHM 405,BSc Chemistry L400
+CALC 9,Friday,06:30,08:30,BCH 404,BSc Biochemistry L400
+NLT 2,Friday,06:30,08:30,CHM 303,BSc Chemistry L300
+SWLT 9,Friday,07:30,09:30,ENV 208,BSc Environmental Science L200
+LT 1,Friday,08:30,09:30,HBI 105,BSc Human Biology L100
+LT 14,Friday,08:30,10:30,ENV 406,BSc Environmental Science L400
+LT 8,Friday,08:30,10:30,CHM 108,BSc Chemistry L100
+SWLT 10,Friday,08:30,10:30,ENV 307,BSc Environmental Science L300
+LT 21,Friday,09:30,10:30,CSC 208,BSc Computer Science L200
+NLT 15,Friday,09:30,10:30,ENV 208,BSc Environmental Science L200
+SWLT 18,Friday,09:30,11:30,HBI 104,BSc Human Biology L100
+SWLT 4,Friday,09:30,11:30,CHM 204,BSc Chemistry L200
+SWLT 9,Friday,09:30,10:30,BCH 305,BSc Biochemistry L300
+LT 15,Friday,10:30,12:30,BCH 107,BSc Biochemistry L100
+NLT 15,Friday,10:30,12:30,ENV 108,BSc Environmental Science L100
+NLT 4,Friday,10:30,13:30,BIO 102,BSc Biology L100
+CALC 1,Friday,11:30,12:30,BIO 303,BSc Biology L300
+CALC 11,Friday,11:30,13:30,CSC 404,BSc Computer Science L400
+LT 7,Friday,11:30,12:30,BIO 402,BSc Biology L400
+SWLT 14,Friday,11:30,12:30,CSC 207,BSc Computer Science L200
+SWLT 5,Friday,11:30,12:30,PHY 106,BSc Physics L100
+SWLT 6,Friday,11:30,12:30,MAT 108,BSc Mathematics L100
+LT 11,Friday,12:30,13:30,PHY 204,BSc Physics L200
+LT 2,Friday,12:30,14:30,HBI 309,BSc Human Biology L300
+CALC 10,Friday,13:30,15:30,BIO 309,BSc Biology L300
+LT 19,Friday,13:30,14:30,ENV 108,BSc Environmental Science L100
+LT 22,Friday,13:30,15:30,PHY 206,BSc Physics L200
+LT 6,Friday,13:30,16:30,ENV 408,BSc Environmental Science L400
+NLT 3,Friday,13:30,15:30,CHM 101,BSc Chemistry L100
+NLT 5,Friday,13:30,16:30,MAT 304,BSc Mathematics L300
+SWLT 2,Friday,14:30,16:30,ENV 307,BSc Environmental Science L300
+CALC 7,Friday,15:30,16:30,BIO 402,BSc Biology L400
+NLT 1,Friday,15:30,16:30,MAT 402,BSc Mathematics L400
+NLT 6,Friday,15:30,16:30,HBI 405,BSc Human Biology L400
+SWLT 11,Friday,15:30,17:30,BIO 109,BSc Biology L100
+SWLT 13,Friday,15:30,17:30,BIO 201,BSc Biology L200
+SWLT 16,Friday,15:30,17:30,BIO 309,BSc Biology L300
+CALC 1,Friday,16:30,18:30,BIO 405,BSc Biology L400
+NLT 8,Friday,16:30,18:30,BCH 207,BSc Biochemistry L200
+SWLT 15,Friday,17:30,19:30,PHY 308,BSc Physics L300
+LT 18,Monday,06:30,08:30,BCH 302,BSc Biochemistry L300
+LT 4,Monday,06:30,08:30,BIO 402,BSc Biology L400
+NLT 1,Monday,06:30,07:30,ENV 303,BSc Environmental Science L300
+NLT 12,Monday,06:30,07:30,MAT 105,BSc Mathematics L100
+NLT 9,Monday,06:30,08:30,ENV 208,BSc Environmental Science L200
+SWLT 14,Monday,06:30,07:30,BIO 102,BSc Biology L100
+SWLT 7,Monday,06:30,09:30,CSC 209,BSc Computer Science L200
+CALC 3,Monday,07:30,09:30,PHY 408,BSc Physics L400
+CALC 5,Monday,07:30,08:30,ENV 404,BSc Environmental Science L400
+LT 6,Monday,07:30,09:30,BIO 303,BSc Biology L300
+NLT 11,Monday,07:30,09:30,HBI 307,BSc Human Biology L300
+NLT 13,Monday,07:30,10:30,CSC 403,BSc Computer Science L400
+NLT 16,Monday,07:30,08:30,MAT 205,BSc Mathematics L200
+LT 3,Monday,08:30,10:30,CSC 103,BSc Computer Science L100
+LT 5,Monday,08:30,10:30,BCH 305,BSc Biochemistry L300
+LT 9,Monday,08:30,11:30,ENV 208,BSc Environmental Science L200
+NLT 10,Monday,08:30,09:30,BIO 203,BSc Biology L200
+NLT 12,Monday,08:30,10:30,ENV 406,BSc Environmental Science L400
+NLT 18,Monday,08:30,10:30,ENV 309,BSc Environmental Science L300
+NLT 9,Monday,08:30,10:30,BCH 403,BSc Biochemistry L400
+CALC 8,Monday,09:30,11:30,HBI 202,BSc Human Biology L200
+NLT 2,Monday,09:30,11:30,CSC 303,BSc Computer Science L300
+SWLT 14,Monday,09:30,11:30,BIO 101,BSc Biology L100
+LT 14,Monday,10:30,12:30,CHM 409,BSc Chemistry L400
+LT 19,Monday,10:30,12:30,CSC 104,BSc Computer Science L100
+SWLT 13,Monday,10:30,11:30,BIO 201,BSc Biology L200
+SWLT 4,Monday,10:30,12:30,BCH 302,BSc Biochemistry L300
+LT 11,Monday,11:30,12:30,MAT 105,BSc Mathematics L100
+LT 7,Monday,11:30,12:30,CSC 301,BSc Computer Science L300
+LT 8,Monday,11:30,13:30,MAT 406,BSc Mathematics L400
+LT 9,Monday,11:30,13:30,BCH 101,BSc Biochemistry L100
+NLT 11,Monday,11:30,13:30,MAT 308,BSc Mathematics L300
+SWLT 11,Monday,11:30,13:30,CHM 106,BSc Chemistry L100
+LT 2,Monday,12:30,14:30,PHY 204,BSc Physics L200
+LT 21,Monday,12:30,14:30,BIO 303,BSc Biology L300
+LT 5,Monday,12:30,14:30,CHM 405,BSc Chemistry L400
+NLT 14,Monday,12:30,15:30,PHY 101,BSc Physics L100
+SWLT 12,Monday,12:30,15:30,HBI 108,BSc Human Biology L100
+SWLT 17,Monday,12:30,13:30,BCH 204,BSc Biochemistry L200
+LT 10,Monday,13:30,14:30,PHY 308,BSc Physics L300
+LT 4,Monday,13:30,15:30,HBI 302,BSc Human Biology L300
+LT 15,Monday,14:30,17:30,ENV 108,BSc Environmental Science L100
+NLT 11,Monday,14:30,15:30,HBI 204,BSc Human Biology L200
+SWLT 10,Monday,14:30,15:30,MAT 204,BSc Mathematics L200
+CALC 8,Monday,15:30,18:30,HBI 203,BSc Human Biology L200
+LT 19,Monday,15:30,16:30,MAT 203,BSc Mathematics L200
+LT 6,Monday,15:30,16:30,CHM 306,BSc Chemistry L300
+LT 2,Monday,16:30,17:30,CSC 305,BSc Computer Science L300
+SWLT 12,Monday,16:30,18:30,HBI 304,BSc Human Biology L300
+LT 2,Thursday,06:30,07:30,CHM 409,BSc Chemistry L400
+NLT 1,Thursday,06:30,08:30,MAT 207,BSc Mathematics L200
+NLT 16,Thursday,06:30,08:30,BCH 402,BSc Biochemistry L400
+NLT 2,Thursday,06:30,07:30,PHY 404,BSc Physics L400
+NLT 5,Thursday,06:30,07:30,HBI 105,BSc Human Biology L100
+SWLT 2,Thursday,06:30,08:30,BIO 105,BSc Biology L100
+LT 14,Thursday,07:30,09:30,BCH 105,BSc Biochemistry L100
+LT 19,Thursday,07:30,08:30,HBI 304,BSc Human Biology L300
+SWLT 19,Thursday,07:30,08:30,CHM 306,BSc Chemistry L300
+SWLT 7,Thursday,07:30,09:30,CSC 301,BSc Computer Science L300
+CALC 1,Thursday,08:30,09:30,BCH 205,BSc Biochemistry L200
+CALC 11,Thursday,08:30,10:30,HBI 405,BSc Human Biology L400
+CALC 8,Thursday,08:30,09:30,CSC 208,BSc Computer Science L200
+NLT 16,Thursday,08:30,09:30,HBI 203,BSc Human Biology L200
+NLT 5,Thursday,08:30,11:30,PHY 405,BSc Physics L400
+SWLT 1,Thursday,08:30,09:30,CSC 109,BSc Computer Science L100
+SWLT 11,Thursday,08:30,09:30,BIO 104,BSc Biology L100
+SWLT 12,Thursday,08:30,09:30,ENV 303,BSc Environmental Science L300
+SWLT 18,Thursday,08:30,11:30,PHY 101,BSc Physics L100
+CALC 4,Thursday,09:30,10:30,CSC 204,BSc Computer Science L200
+LT 10,Thursday,09:30,10:30,CHM 303,BSc Chemistry L300
+LT 15,Thursday,09:30,12:30,CHM 404,BSc Chemistry L400
+LT 2,Thursday,09:30,11:30,CHM 207,BSc Chemistry L200
+LT 9,Thursday,09:30,12:30,BIO 403,BSc Biology L400
+NLT 12,Thursday,09:30,12:30,HBI 108,BSc Human Biology L100
+NLT 14,Thursday,09:30,11:30,BCH 205,BSc Biochemistry L200
+NLT 16,Thursday,09:30,12:30,ENV 404,BSc Environmental Science L400
+NLT 6,Thursday,09:30,11:30,PHY 201,BSc Physics L200
+SWLT 13,Thursday,09:30,10:30,PHY 301,BSc Physics L300
+SWLT 15,Thursday,09:30,11:30,HBI 309,BSc Human Biology L300
+SWLT 2,Thursday,09:30,10:30,MAT 101,BSc Mathematics L100
+SWLT 3,Thursday,09:30,11:30,MAT 307,BSc Mathematics L300
+LT 18,Thursday,10:30,13:30,ENV 209,BSc Environmental Science L200
+LT 21,Thursday,10:30,12:30,BCH 409,BSc Biochemistry L400
+NLT 18,Thursday,10:30,12:30,BIO 105,BSc Biology L100
+SWLT 19,Thursday,10:30,13:30,CSC 207,BSc Computer Science L200
+LT 10,Thursday,11:30,13:30,PHY 403,BSc Physics L400
+LT 6,Thursday,11:30,12:30,HBI 304,BSc Human Biology L300
+NLT 6,Thursday,11:30,12:30,CHM 301,BSc Chemistry L300
+LT 15,Thursday,12:30,14:30,ENV 107,BSc Environmental Science L100
+SWLT 1,Thursday,12:30,14:30,HBI 301,BSc Human Biology L300
+SWLT 5,Thursday,12:30,14:30,HBI 203,BSc Human Biology L200
+LT 2,Thursday,13:30,15:30,BIO 309,BSc Biology L300
+LT 5,Thursday,13:30,14:30,ENV 406,BSc Environmental Science L400
+NLT 8,Thursday,13:30,14:30,BCH 305,BSc Biochemistry L300
+CALC 1,Thursday,14:30,15:30,HBI 309,BSc Human Biology L300
+CALC 10,Thursday,14:30,17:30,PHY 404,BSc Physics L400
+CALC 6,Thursday,14:30,16:30,CSC 406,BSc Computer Science L400
+LT 16,Thursday,14:30,16:30,ENV 402,BSc Environmental Science L400
+SWLT 13,Thursday,14:30,16:30,CSC 303,BSc Computer Science L300
+SWLT 6,Thursday,14:30,16:30,CHM 301,BSc Chemistry L300
+LT 11,Thursday,15:30,17:30,CSC 109,BSc Computer Science L100
+LT 12,Thursday,15:30,16:30,CHM 403,BSc Chemistry L400
+LT 14,Thursday,15:30,17:30,BIO 303,BSc Biology L300
+SWLT 17,Thursday,15:30,18:30,BCH 208,BSc Biochemistry L200
+NLT 4,Thursday,16:30,17:30,BIO 101,BSc Biology L100
+SWLT 15,Thursday,16:30,18:30,MAT 207,BSc Mathematics L200
+SWLT 9,Thursday,16:30,18:30,PHY 309,BSc Physics L300
+LT 15,Thursday,17:30,19:30,PHY 403,BSc Physics L400
+LT 16,Thursday,17:30,19:30,CHM 303,BSc Chemistry L300
+NLT 9,Thursday,17:30,18:30,BIO 206,BSc Biology L200
+SWLT 7,Thursday,17:30,19:30,ENV 306,BSc Environmental Science L300
+NLT 11,Thursday,18:30,19:30,BCH 404,BSc Biochemistry L400
+LT 20,Tuesday,06:30,08:30,CHM 402,BSc Chemistry L400
+LT 21,Tuesday,06:30,08:30,CSC 207,BSc Computer Science L200
+NLT 12,Tuesday,06:30,08:30,HBI 104,BSc Human Biology L100
+SWLT 3,Tuesday,06:30,08:30,BIO 105,BSc Biology L100
+CALC 4,Tuesday,07:30,09:30,ENV 206,BSc Environmental Science L200
+LT 11,Tuesday,07:30,09:30,MAT 107,BSc Mathematics L100
+LT 13,Tuesday,07:30,09:30,BIO 402,BSc Biology L400
+NLT 5,Tuesday,07:30,09:30,HBI 301,BSc Human Biology L300
+NLT 8,Tuesday,07:30,09:30,BCH 301,BSc Biochemistry L300
+SWLT 12,Tuesday,07:30,09:30,ENV 306,BSc Environmental Science L300
+CALC 3,Tuesday,08:30,11:30,MAT 406,BSc Mathematics L400
+LT 12,Tuesday,08:30,09:30,BIO 203,BSc Biology L200
+LT 20,Tuesday,08:30,09:30,PHY 308,BSc Physics L300
+NLT 16,Tuesday,08:30,11:30,MAT 201,BSc Mathematics L200
+SWLT 6,Tuesday,08:30,10:30,CHM 204,BSc Chemistry L200
+NLT 14,Tuesday,09:30,12:30,ENV 309,BSc Environmental Science L300
+NLT 3,Tuesday,09:30,12:30,HBI 203,BSc Human Biology L200
+SWLT 15,Tuesday,09:30,12:30,CSC 104,BSc Computer Science L100
+SWLT 8,Tuesday,09:30,11:30,CHM 306,BSc Chemistry L300
+LT 10,Tuesday,10:30,12:30,MAT 302,BSc Mathematics L300
+LT 13,Tuesday,10:30,12:30,BCH 301,BSc Biochemistry L300
+LT 2,Tuesday,10:30,11:30,PHY 403,BSc Physics L400
+LT 5,Tuesday,10:30,12:30,MAT 108,BSc Mathematics L100
+LT 6,Tuesday,10:30,12:30,PHY 304,BSc Physics L300
+LT 7,Tuesday,10:30,12:30,ENV 405,BSc Environmental Science L400
+NLT 4,Tuesday,10:30,11:30,BIO 405,BSc Biology L400
+SWLT 13,Tuesday,10:30,11:30,BIO 303,BSc Biology L300
+SWLT 4,Tuesday,10:30,12:30,CSC 304,BSc Computer Science L300
+NLT 13,Tuesday,11:30,13:30,CHM 302,BSc Chemistry L300
+NLT 15,Tuesday,11:30,13:30,BCH 409,BSc Biochemistry L400
+NLT 6,Tuesday,11:30,12:30,BIO 102,BSc Biology L100
+CALC 5,Tuesday,12:30,14:30,PHY 409,BSc Physics L400
+LT 22,Tuesday,12:30,14:30,PHY 308,BSc Physics L300
+SWLT 1,Tuesday,12:30,14:30,HBI 205,BSc Human Biology L200
+SWLT 17,Tuesday,12:30,14:30,CHM 101,BSc Chemistry L100
+NLT 15,Tuesday,13:30,14:30,PHY 105,BSc Physics L100
+NLT 2,Tuesday,13:30,15:30,BCH 308,BSc Biochemistry L300
+SWLT 10,Tuesday,13:30,14:30,ENV 303,BSc Environmental Science L300
+CALC 4,Tuesday,14:30,16:30,MAT 304,BSc Mathematics L300
+LT 7,Tuesday,14:30,16:30,CSC 105,BSc Computer Science L100
+SWLT 16,Tuesday,14:30,15:30,BCH 207,BSc Biochemistry L200
+LT 13,Tuesday,15:30,18:30,HBI 401,BSc Human Biology L400
+LT 4,Tuesday,15:30,17:30,PHY 204,BSc Physics L200
+NLT 13,Tuesday,15:30,17:30,CSC 404,BSc Computer Science L400
+NLT 9,Tuesday,15:30,17:30,BIO 105,BSc Biology L100
+SWLT 1,Tuesday,16:30,18:30,CHM 203,BSc Chemistry L200
+CALC 9,Tuesday,17:30,19:30,ENV 406,BSc Environmental Science L400
+SWLT 5,Tuesday,17:30,18:30,BIO 207,BSc Biology L200
+LT 1,Tuesday,18:30,19:30,ENV 108,BSc Environmental Science L100
+CALC 6,Wednesday,06:30,09:30,PHY 304,BSc Physics L300
+CALC 9,Wednesday,06:30,08:30,BIO 404,BSc Biology L400
+NLT 3,Wednesday,06:30,07:30,PHY 408,BSc Physics L400
+SWLT 18,Wednesday,06:30,08:30,HBI 106,BSc Human Biology L100
+CALC 10,Wednesday,07:30,09:30,CSC 405,BSc Computer Science L400
+LT 6,Wednesday,07:30,09:30,MAT 402,BSc Mathematics L400
+CALC 2,Wednesday,08:30,10:30,HBI 401,BSc Human Biology L400
+LT 11,Wednesday,08:30,11:30,CSC 303,BSc Computer Science L300
+LT 8,Wednesday,08:30,09:30,BCH 402,BSc Biochemistry L400
+SWLT 10,Wednesday,08:30,10:30,BIO 104,BSc Biology L100
+SWLT 13,Wednesday,08:30,10:30,BIO 203,BSc Biology L200
+SWLT 2,Wednesday,08:30,09:30,CHM 207,BSc Chemistry L200
+SWLT 5,Wednesday,08:30,09:30,CHM 102,BSc Chemistry L100
+LT 1,Wednesday,09:30,11:30,BCH 206,BSc Biochemistry L200
+LT 21,Wednesday,09:30,11:30,ENV 402,BSc Environmental Science L400
+LT 5,Wednesday,09:30,10:30,PHY 207,BSc Physics L200
+LT 6,Wednesday,09:30,10:30,BIO 405,BSc Biology L400
+NLT 9,Wednesday,09:30,11:30,CHM 302,BSc Chemistry L300
+LT 14,Wednesday,10:30,12:30,MAT 109,BSc Mathematics L100
+LT 15,Wednesday,10:30,11:30,ENV 204,BSc Environmental Science L200
+NLT 13,Wednesday,10:30,12:30,CHM 405,BSc Chemistry L400
+SWLT 17,Wednesday,10:30,13:30,ENV 103,BSc Environmental Science L100
+SWLT 8,Wednesday,10:30,13:30,PHY 103,BSc Physics L100
+CALC 4,Wednesday,11:30,13:30,CSC 406,BSc Computer Science L400
+LT 7,Wednesday,11:30,14:30,BCH 101,BSc Biochemistry L100
+NLT 13,Wednesday,12:30,14:30,BIO 306,BSc Biology L300
+SWLT 14,Wednesday,12:30,14:30,CHM 309,BSc Chemistry L300
+SWLT 9,Wednesday,12:30,14:30,BCH 208,BSc Biochemistry L200
+CALC 1,Wednesday,13:30,15:30,MAT 207,BSc Mathematics L200
+CALC 8,Wednesday,13:30,14:30,PHY 207,BSc Physics L200
+LT 19,Wednesday,13:30,15:30,PHY 101,BSc Physics L100
+NLT 18,Wednesday,13:30,15:30,CHM 101,BSc Chemistry L100
+SWLT 7,Wednesday,13:30,15:30,MAT 107,BSc Mathematics L100
+LT 15,Wednesday,14:30,17:30,CHM 303,BSc Chemistry L300
+SWLT 10,Wednesday,14:30,15:30,ENV 204,BSc Environmental Science L200
+NLT 1,Wednesday,15:30,16:30,ENV 408,BSc Environmental Science L400
+SWLT 11,Wednesday,15:30,17:30,CSC 103,BSc Computer Science L100
+NLT 8,Wednesday,16:30,18:30,HBI 304,BSc Human Biology L300
+LT 8,Wednesday,17:30,19:30,PHY 103,BSc Physics L100
+SWLT 14,Wednesday,17:30,18:30,CSC 304,BSc Computer Science L300

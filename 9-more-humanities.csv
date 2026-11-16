@@ -1,0 +1,261 @@
+hall,day,start,end,course,programme
+LT 11,Friday,06:30,07:30,ECO 407,BA Economics L400
+LT 18,Friday,06:30,08:30,HIS 305,BA History L300
+NLT 17,Friday,06:30,07:30,GRP 403,BA Geography and Regional Planning L400
+NLT 6,Friday,06:30,08:30,ECO 302,BA Economics L300
+SWLT 15,Friday,06:30,07:30,ENG 102,BA English L100
+CALC 7,Friday,07:30,09:30,ECO 407,BA Economics L400
+LT 13,Friday,07:30,09:30,SOC 308,BA Sociology L300
+NLT 10,Friday,07:30,08:30,ECO 105,BA Economics L100
+NLT 12,Friday,07:30,08:30,PSY 301,BA Psychology L300
+NLT 18,Friday,07:30,09:30,HIS 201,BA History L200
+SWLT 14,Friday,07:30,08:30,PSY 203,BA Psychology L200
+SWLT 5,Friday,07:30,08:30,ENG 302,BA English L300
+LT 5,Friday,08:30,09:30,GRP 403,BA Geography and Regional Planning L400
+SWLT 2,Friday,08:30,10:30,FRN 103,BA French L100
+CALC 1,Friday,09:30,11:30,FRN 309,BA French L300
+CALC 11,Friday,09:30,10:30,PSY 202,BA Psychology L200
+CALC 4,Friday,09:30,11:30,FRN 402,BA French L400
+LT 11,Friday,09:30,11:30,ENG 305,BA English L300
+LT 5,Friday,09:30,11:30,HIS 202,BA History L200
+NLT 10,Friday,09:30,11:30,SOC 409,BA Sociology L400
+SWLT 5,Friday,09:30,11:30,ENG 102,BA English L100
+LT 1,Friday,10:30,11:30,PSY 103,BA Psychology L100
+LT 3,Friday,10:30,12:30,FRN 202,BA French L200
+CALC 7,Friday,11:30,13:30,PSY 208,BA Psychology L200
+CALC 9,Friday,11:30,13:30,GRP 305,BA Geography and Regional Planning L300
+NLT 10,Friday,11:30,14:30,ECO 407,BA Economics L400
+NLT 3,Friday,11:30,13:30,ENG 403,BA English L400
+NLT 8,Friday,11:30,14:30,GRP 103,BA Geography and Regional Planning L100
+LT 17,Friday,12:30,14:30,PSY 305,BA Psychology L300
+LT 7,Friday,12:30,14:30,SOC 302,BA Sociology L300
+NLT 18,Friday,12:30,14:30,ECO 304,BA Economics L300
+SWLT 9,Friday,12:30,14:30,FRN 203,BA French L200
+CALC 1,Friday,13:30,15:30,FRN 301,BA French L300
+LT 12,Friday,13:30,15:30,HIS 402,BA History L400
+LT 5,Friday,13:30,16:30,HIS 306,BA History L300
+NLT 11,Friday,13:30,16:30,ENG 405,BA English L400
+NLT 13,Friday,13:30,15:30,FRN 407,BA French L400
+NLT 17,Friday,13:30,15:30,PSY 202,BA Psychology L200
+SWLT 18,Friday,13:30,14:30,POL 107,BA Political Science L100
+LT 15,Friday,14:30,16:30,POL 401,BA Political Science L400
+LT 18,Friday,14:30,15:30,GRP 109,BA Geography and Regional Planning L100
+LT 19,Friday,14:30,16:30,FRN 203,BA French L200
+NLT 15,Friday,14:30,17:30,ECO 405,BA Economics L400
+SWLT 17,Friday,14:30,16:30,POL 305,BA Political Science L300
+CALC 6,Friday,15:30,17:30,FRN 408,BA French L400
+LT 11,Friday,15:30,17:30,PSY 101,BA Psychology L100
+CALC 6,Friday,18:30,19:30,FRN 207,BA French L200
+LT 15,Friday,18:30,19:30,SOC 107,BA Sociology L100
+LT 2,Friday,18:30,19:30,ECO 105,BA Economics L100
+SWLT 13,Monday,06:30,08:30,FRN 207,BA French L200
+LT 7,Monday,07:30,08:30,ENG 203,BA English L200
+NLT 1,Monday,07:30,08:30,PSY 403,BA Psychology L400
+NLT 18,Monday,07:30,08:30,SOC 206,BA Sociology L200
+NLT 4,Monday,07:30,09:30,HIS 409,BA History L400
+CALC 4,Monday,08:30,10:30,PSY 405,BA Psychology L400
+LT 14,Monday,08:30,10:30,ENG 307,BA English L300
+LT 16,Monday,08:30,10:30,GRP 407,BA Geography and Regional Planning L400
+LT 18,Monday,08:30,11:30,GRP 208,BA Geography and Regional Planning L200
+LT 22,Monday,08:30,11:30,SOC 209,BA Sociology L200
+LT 8,Monday,08:30,11:30,SOC 409,BA Sociology L400
+NLT 8,Monday,08:30,11:30,HIS 302,BA History L300
+SWLT 12,Monday,08:30,10:30,GRP 109,BA Geography and Regional Planning L100
+SWLT 13,Monday,08:30,09:30,FRN 205,BA French L200
+SWLT 16,Monday,08:30,11:30,ECO 102,BA Economics L100
+SWLT 19,Monday,08:30,10:30,FRN 302,BA French L300
+SWLT 3,Monday,08:30,10:30,SOC 101,BA Sociology L100
+SWLT 4,Monday,08:30,10:30,POL 302,BA Political Science L300
+CALC 10,Monday,09:30,11:30,HIS 402,BA History L400
+CALC 3,Monday,09:30,11:30,HIS 206,BA History L200
+LT 7,Monday,09:30,10:30,POL 401,BA Political Science L400
+NLT 14,Monday,09:30,11:30,ENG 102,BA English L100
+SWLT 18,Monday,09:30,11:30,SOC 305,BA Sociology L300
+SWLT 2,Monday,09:30,10:30,ECO 207,BA Economics L200
+LT 15,Monday,10:30,13:30,ECO 307,BA Economics L300
+LT 20,Monday,10:30,12:30,POL 409,BA Political Science L400
+LT 21,Monday,10:30,12:30,ENG 209,BA English L200
+NLT 5,Monday,10:30,11:30,POL 102,BA Political Science L100
+LT 18,Monday,11:30,13:30,FRN 301,BA French L300
+SWLT 18,Monday,11:30,14:30,HIS 105,BA History L100
+LT 6,Monday,12:30,13:30,SOC 102,BA Sociology L100
+SWLT 7,Monday,12:30,14:30,GRP 305,BA Geography and Regional Planning L300
+CALC 1,Monday,13:30,15:30,FRN 203,BA French L200
+LT 17,Monday,13:30,14:30,ECO 208,BA Economics L200
+NLT 11,Monday,13:30,14:30,PSY 409,BA Psychology L400
+NLT 6,Monday,13:30,16:30,FRN 101,BA French L100
+LT 17,Monday,14:30,16:30,GRP 309,BA Geography and Regional Planning L300
+LT 20,Monday,14:30,16:30,GRP 105,BA Geography and Regional Planning L100
+NLT 5,Monday,14:30,17:30,ENG 209,BA English L200
+CALC 3,Monday,15:30,18:30,HIS 407,BA History L400
+LT 11,Monday,15:30,17:30,HIS 108,BA History L100
+LT 21,Monday,15:30,16:30,HIS 201,BA History L200
+SWLT 10,Monday,15:30,16:30,POL 305,BA Political Science L300
+LT 17,Monday,16:30,18:30,FRN 304,BA French L300
+LT 7,Monday,16:30,18:30,ECO 306,BA Economics L300
+SWLT 13,Monday,16:30,18:30,POL 205,BA Political Science L200
+NLT 12,Monday,17:30,19:30,SOC 206,BA Sociology L200
+SWLT 1,Monday,17:30,18:30,ECO 102,BA Economics L100
+NLT 4,Monday,18:30,19:30,GRP 205,BA Geography and Regional Planning L200
+LT 1,Thursday,06:30,08:30,FRN 301,BA French L300
+NLT 6,Thursday,06:30,07:30,FRN 403,BA French L400
+SWLT 10,Thursday,06:30,08:30,FRN 202,BA French L200
+SWLT 12,Thursday,06:30,08:30,SOC 106,BA Sociology L100
+CALC 4,Thursday,07:30,08:30,POL 205,BA Political Science L200
+LT 18,Thursday,07:30,10:30,POL 403,BA Political Science L400
+SWLT 14,Thursday,07:30,09:30,ECO 105,BA Economics L100
+SWLT 3,Thursday,07:30,09:30,GRP 105,BA Geography and Regional Planning L100
+LT 11,Thursday,08:30,10:30,FRN 402,BA French L400
+LT 12,Thursday,08:30,10:30,POL 107,BA Political Science L100
+LT 19,Thursday,08:30,10:30,ENG 205,BA English L200
+LT 22,Thursday,08:30,09:30,HIS 201,BA History L200
+NLT 1,Thursday,08:30,10:30,ENG 407,BA English L400
+NLT 11,Thursday,08:30,11:30,ECO 202,BA Economics L200
+NLT 13,Thursday,08:30,11:30,PSY 208,BA Psychology L200
+NLT 4,Thursday,08:30,11:30,HIS 406,BA History L400
+NLT 7,Thursday,08:30,09:30,POL 205,BA Political Science L200
+NLT 9,Thursday,08:30,10:30,FRN 101,BA French L100
+SWLT 10,Thursday,08:30,09:30,HIS 301,BA History L300
+LT 14,Thursday,09:30,11:30,GRP 106,BA Geography and Regional Planning L100
+LT 16,Thursday,09:30,12:30,FRN 309,BA French L300
+LT 6,Thursday,09:30,11:30,HIS 201,BA History L200
+SWLT 14,Thursday,09:30,11:30,GRP 207,BA Geography and Regional Planning L200
+SWLT 5,Thursday,09:30,11:30,HIS 306,BA History L300
+SWLT 7,Thursday,09:30,10:30,GRP 306,BA Geography and Regional Planning L300
+SWLT 8,Thursday,09:30,11:30,SOC 208,BA Sociology L200
+LT 19,Thursday,10:30,11:30,ENG 305,BA English L300
+CALC 3,Thursday,11:30,14:30,ECO 307,BA Economics L300
+LT 19,Thursday,11:30,12:30,PSY 301,BA Psychology L300
+LT 2,Thursday,11:30,12:30,HIS 305,BA History L300
+NLT 17,Thursday,11:30,13:30,ECO 407,BA Economics L400
+NLT 4,Thursday,11:30,14:30,GRP 103,BA Geography and Regional Planning L100
+SWLT 16,Thursday,11:30,13:30,ECO 105,BA Economics L100
+SWLT 3,Thursday,11:30,13:30,GRP 305,BA Geography and Regional Planning L300
+LT 11,Thursday,12:30,14:30,ECO 206,BA Economics L200
+LT 14,Thursday,12:30,13:30,POL 208,BA Political Science L200
+LT 3,Thursday,12:30,14:30,ENG 106,BA English L100
+NLT 16,Thursday,12:30,14:30,POL 401,BA Political Science L400
+NLT 18,Thursday,12:30,13:30,ENG 407,BA English L400
+CALC 7,Thursday,13:30,15:30,ECO 405,BA Economics L400
+NLT 14,Thursday,13:30,14:30,ENG 209,BA English L200
+SWLT 7,Thursday,13:30,15:30,HIS 108,BA History L100
+LT 20,Thursday,14:30,17:30,HIS 406,BA History L400
+NLT 11,Thursday,14:30,17:30,HIS 304,BA History L300
+NLT 7,Thursday,14:30,15:30,POL 403,BA Political Science L400
+SWLT 1,Thursday,14:30,16:30,ECO 109,BA Economics L100
+SWLT 17,Thursday,14:30,15:30,ENG 103,BA English L100
+LT 18,Thursday,15:30,17:30,ECO 406,BA Economics L400
+NLT 10,Thursday,15:30,17:30,SOC 107,BA Sociology L100
+LT 17,Thursday,16:30,18:30,ECO 306,BA Economics L300
+LT 4,Thursday,16:30,17:30,ECO 102,BA Economics L100
+SWLT 6,Thursday,16:30,18:30,GRP 106,BA Geography and Regional Planning L100
+LT 9,Thursday,17:30,19:30,FRN 204,BA French L200
+SWLT 12,Thursday,17:30,19:30,ENG 307,BA English L300
+LT 22,Tuesday,06:30,09:30,ECO 405,BA Economics L400
+LT 17,Tuesday,07:30,09:30,POL 209,BA Political Science L200
+LT 19,Tuesday,07:30,08:30,ENG 103,BA English L100
+LT 2,Tuesday,07:30,09:30,SOC 209,BA Sociology L200
+LT 7,Tuesday,07:30,09:30,HIS 201,BA History L200
+NLT 17,Tuesday,07:30,09:30,PSY 203,BA Psychology L200
+SWLT 15,Tuesday,07:30,09:30,PSY 102,BA Psychology L100
+SWLT 8,Tuesday,07:30,08:30,SOC 102,BA Sociology L100
+CALC 8,Tuesday,08:30,10:30,HIS 305,BA History L300
+CALC 9,Tuesday,08:30,10:30,SOC 404,BA Sociology L400
+LT 5,Tuesday,08:30,10:30,POL 304,BA Political Science L300
+LT 6,Tuesday,08:30,10:30,SOC 102,BA Sociology L100
+NLT 18,Tuesday,08:30,09:30,PSY 303,BA Psychology L300
+SWLT 16,Tuesday,08:30,09:30,ENG 103,BA English L100
+SWLT 19,Tuesday,08:30,09:30,POL 103,BA Political Science L100
+SWLT 4,Tuesday,08:30,09:30,HIS 106,BA History L100
+SWLT 7,Tuesday,08:30,11:30,SOC 302,BA Sociology L300
+CALC 6,Tuesday,09:30,11:30,ENG 203,BA English L200
+LT 11,Tuesday,09:30,12:30,GRP 306,BA Geography and Regional Planning L300
+LT 9,Tuesday,09:30,11:30,GRP 405,BA Geography and Regional Planning L400
+SWLT 16,Tuesday,09:30,11:30,POL 106,BA Political Science L100
+LT 3,Tuesday,10:30,12:30,PSY 205,BA Psychology L200
+SWLT 1,Tuesday,10:30,12:30,GRP 103,BA Geography and Regional Planning L100
+SWLT 14,Tuesday,10:30,12:30,HIS 105,BA History L100
+SWLT 2,Tuesday,10:30,12:30,FRN 101,BA French L100
+SWLT 9,Tuesday,10:30,13:30,ENG 303,BA English L300
+LT 16,Tuesday,11:30,13:30,HIS 301,BA History L300
+LT 19,Tuesday,11:30,12:30,PSY 305,BA Psychology L300
+NLT 11,Tuesday,11:30,14:30,HIS 407,BA History L400
+NLT 8,Tuesday,11:30,12:30,ENG 407,BA English L400
+LT 1,Tuesday,12:30,13:30,POL 105,BA Political Science L100
+LT 14,Tuesday,12:30,14:30,GRP 305,BA Geography and Regional Planning L300
+NLT 7,Tuesday,12:30,14:30,FRN 101,BA French L100
+CALC 3,Tuesday,13:30,15:30,GRP 403,BA Geography and Regional Planning L400
+LT 3,Tuesday,13:30,15:30,POL 403,BA Political Science L400
+LT 7,Tuesday,13:30,14:30,FRN 309,BA French L300
+NLT 14,Tuesday,13:30,14:30,HIS 204,BA History L200
+NLT 5,Tuesday,13:30,14:30,ECO 102,BA Economics L100
+SWLT 11,Tuesday,13:30,15:30,ENG 308,BA English L300
+LT 1,Tuesday,14:30,15:30,SOC 305,BA Sociology L300
+NLT 5,Tuesday,14:30,16:30,SOC 101,BA Sociology L100
+SWLT 9,Tuesday,14:30,16:30,SOC 203,BA Sociology L200
+CALC 10,Tuesday,15:30,16:30,SOC 409,BA Sociology L400
+CALC 2,Tuesday,15:30,16:30,POL 403,BA Political Science L400
+CALC 8,Tuesday,15:30,16:30,FRN 205,BA French L200
+LT 19,Tuesday,15:30,17:30,HIS 206,BA History L200
+NLT 2,Tuesday,15:30,16:30,ENG 407,BA English L400
+NLT 4,Tuesday,15:30,16:30,POL 304,BA Political Science L300
+SWLT 2,Tuesday,15:30,17:30,ENG 302,BA English L300
+NLT 10,Tuesday,16:30,18:30,HIS 108,BA History L100
+NLT 12,Tuesday,16:30,19:30,SOC 301,BA Sociology L300
+NLT 17,Tuesday,16:30,18:30,SOC 108,BA Sociology L100
+SWLT 10,Tuesday,16:30,17:30,FRN 304,BA French L300
+CALC 11,Tuesday,17:30,19:30,ENG 205,BA English L200
+NLT 5,Tuesday,18:30,19:30,PSY 401,BA Psychology L400
+CALC 4,Wednesday,06:30,08:30,ENG 307,BA English L300
+NLT 5,Wednesday,06:30,07:30,ECO 407,BA Economics L400
+SWLT 13,Wednesday,06:30,07:30,PSY 101,BA Psychology L100
+SWLT 17,Wednesday,06:30,08:30,SOC 206,BA Sociology L200
+LT 20,Wednesday,07:30,08:30,PSY 405,BA Psychology L400
+LT 7,Wednesday,07:30,09:30,ENG 107,BA English L100
+NLT 16,Wednesday,07:30,08:30,GRP 405,BA Geography and Regional Planning L400
+SWLT 1,Wednesday,07:30,08:30,GRP 105,BA Geography and Regional Planning L100
+SWLT 6,Wednesday,07:30,08:30,FRN 302,BA French L300
+SWLT 9,Wednesday,07:30,09:30,SOC 101,BA Sociology L100
+CALC 11,Wednesday,08:30,10:30,HIS 406,BA History L400
+LT 4,Wednesday,08:30,11:30,FRN 109,BA French L100
+NLT 5,Wednesday,08:30,11:30,ENG 402,BA English L400
+SWLT 14,Wednesday,08:30,10:30,ECO 204,BA Economics L200
+SWLT 17,Wednesday,08:30,09:30,HIS 206,BA History L200
+SWLT 19,Wednesday,08:30,10:30,HIS 106,BA History L100
+SWLT 6,Wednesday,08:30,09:30,FRN 205,BA French L200
+LT 18,Wednesday,09:30,10:30,HIS 305,BA History L300
+NLT 11,Wednesday,09:30,11:30,POL 408,BA Political Science L400
+SWLT 9,Wednesday,09:30,11:30,PSY 203,BA Psychology L200
+LT 12,Wednesday,10:30,11:30,SOC 106,BA Sociology L100
+LT 9,Wednesday,10:30,11:30,HIS 201,BA History L200
+NLT 4,Wednesday,10:30,11:30,ECO 405,BA Economics L400
+SWLT 19,Wednesday,10:30,11:30,SOC 305,BA Sociology L300
+SWLT 2,Wednesday,10:30,13:30,PSY 106,BA Psychology L100
+NLT 12,Wednesday,11:30,13:30,FRN 202,BA French L200
+NLT 15,Wednesday,11:30,13:30,GRP 208,BA Geography and Regional Planning L200
+NLT 16,Wednesday,11:30,12:30,ECO 309,BA Economics L300
+NLT 2,Wednesday,11:30,14:30,SOC 206,BA Sociology L200
+SWLT 13,Wednesday,11:30,12:30,POL 105,BA Political Science L100
+LT 11,Wednesday,12:30,15:30,GRP 305,BA Geography and Regional Planning L300
+LT 17,Wednesday,12:30,14:30,FRN 301,BA French L300
+LT 18,Wednesday,12:30,15:30,ENG 403,BA English L400
+LT 22,Wednesday,12:30,13:30,ENG 107,BA English L100
+SWLT 1,Wednesday,12:30,14:30,GRP 109,BA Geography and Regional Planning L100
+SWLT 7,Wednesday,12:30,13:30,ENG 302,BA English L300
+NLT 14,Wednesday,13:30,15:30,ENG 302,BA English L300
+NLT 4,Wednesday,13:30,15:30,HIS 202,BA History L200
+SWLT 2,Wednesday,13:30,15:30,PSY 205,BA Psychology L200
+CALC 6,Wednesday,14:30,16:30,ECO 304,BA Economics L300
+CALC 7,Wednesday,14:30,15:30,PSY 407,BA Psychology L400
+LT 10,Wednesday,14:30,17:30,HIS 407,BA History L400
+LT 14,Wednesday,14:30,16:30,POL 206,BA Political Science L200
+NLT 12,Wednesday,14:30,16:30,ECO 406,BA Economics L400
+SWLT 1,Wednesday,14:30,16:30,GRP 109,BA Geography and Regional Planning L100
+CALC 3,Wednesday,15:30,16:30,FRN 303,BA French L300
+LT 16,Wednesday,15:30,17:30,GRP 305,BA Geography and Regional Planning L300
+NLT 18,Wednesday,15:30,16:30,SOC 407,BA Sociology L400
+NLT 5,Wednesday,15:30,16:30,PSY 302,BA Psychology L300
+LT 14,Wednesday,16:30,18:30,ENG 401,BA English L400
+NLT 16,Wednesday,16:30,18:30,ECO 206,BA Economics L200
+NLT 4,Wednesday,16:30,17:30,POL 204,BA Political Science L200
+NLT 9,Wednesday,16:30,17:30,SOC 404,BA Sociology L400
