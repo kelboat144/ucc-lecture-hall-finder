@@ -88,3 +88,30 @@ td,th{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}th{fon
 .changes{padding:10px 12px}.changes h2{font-size:1rem;margin-bottom:4px}
 .changes .list{max-height:190px;overflow:auto}
 .changes .ln{font-size:.85rem}
+
+/* compact sizing: less scrolling, fits more on a phone screen */
+body{font-size:14px}
+label{font-size:.72rem}
+input,select{min-height:36px;padding:6px 9px;border-radius:9px}
+.btn{min-height:36px;padding:7px 12px}
+.top{padding-top:max(6px,env(safe-area-inset-top));padding-bottom:6px}
+.top .brand{font-size:1rem}.avatar{width:30px;height:30px}
+main{padding:10px 10px 32px}
+.panel{padding:10px;margin-bottom:8px}
+.when{gap:8px}
+.stats{gap:8px;margin-bottom:8px}.stat{padding:8px 12px}.stat b{font-size:1.35rem}.stat span{font-size:.68rem}
+.tabs{padding:3px;margin-bottom:8px}.tabs button{padding:6px}
+.grid{gap:8px}
+.hall{padding:10px 12px}.hall .row{margin-bottom:7px;align-items:center}.hall h3{font-size:1rem}.hall p{font-size:.74rem}
+.badge{font-size:.72rem;padding:3px 9px}
+.tl{height:7px}.tlab{font-size:.6rem}
+@media (max-width:760px){.hall:not(.open) .tlab{display:none}.when .btn{min-height:34px}.stat b{font-size:1.2rem}}
+
+/* dashboard + messages */
+textarea{font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;resize:vertical}
+.item{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:8px;background:var(--card)}
+.item .l1{font-size:.9rem}.item .l2{margin:2px 0}.item .l3{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px}
+.item.unread{border-left:5px solid var(--gold)}
+.reply{background:var(--bg);border-radius:8px;padding:6px 9px;margin-top:6px;font-size:.85rem}
+.dot{background:var(--gold);color:#0f2a4f;border-radius:99px;font-size:.7rem;font-weight:800;padding:1px 7px;margin-left:6px}
+.scroll{max-height:420px;overflow:auto}

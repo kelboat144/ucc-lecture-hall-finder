@@ -42,6 +42,28 @@
   </nav>
 
   <main>
+    <section id="vDash" hidden>
+      <div class="stats">
+        <div class="stat gold"><b id="dChanges">0</b><span>Class changes</span></div>
+        <div class="stat"><b id="dBookings">0</b><span>Bookings</span></div>
+        <div class="stat"><b id="dUnread">0</b><span>Unread</span></div>
+      </div>
+      <div class="panel"><h2>Class changes (today onwards)</h2><div id="dChangeList" class="scroll"></div></div>
+      <div class="panel"><h2>Bookings (today onwards)</h2><div id="dBookList" class="scroll"></div></div>
+      <div class="panel"><h2>Messages from reps</h2><div id="dMsgList" class="scroll"></div></div>
+    </section>
+
+    <section id="vMsg" hidden>
+      <form id="msgForm" class="panel narrow">
+        <h2>Message the admin</h2>
+        <textarea id="msgBody" rows="3" maxlength="500" placeholder="Short note, e.g. our Monday class is online this week" required></textarea>
+        <button class="btn" type="submit">Send</button>
+        <p class="msg" id="msgMsg"></p>
+      </form>
+      <h2>Your messages</h2>
+      <div id="msgList"></div>
+    </section>
+
     <section id="vFind">
       <div class="panel when">
         <label>Date <input type="date" id="date"></label>

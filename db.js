@@ -53,11 +53,20 @@ CREATE TABLE IF NOT EXISTS bookings (
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   created INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  body TEXT NOT NULL,
+  created INTEGER NOT NULL,
+  is_read INTEGER NOT NULL DEFAULT 0,
+  reply TEXT,
+  replied INTEGER
+);
 CREATE INDEX IF NOT EXISTS idx_classes_hall_day ON classes(hall_id, day);
 CREATE INDEX IF NOT EXISTS idx_bookings_date ON bookings(date, hall_id);
 `);
 
-for (const col of ["kind TEXT NOT NULL DEFAULT 'online'", 'new_date TEXT', 'new_start INTEGER', 'new_end INTEGER']) {
+for (const col of ["kind TEXT NOT NULL DEFAULT 'online'", 'new_date TEXT', 'new_start INTEGER', 'new_end INTEGER', 'created INTEGER']) {
   try { db.exec('ALTER TABLE releases ADD COLUMN ' + col); } catch (e) { /* already there */ }
 }
 

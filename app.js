@@ -8,6 +8,7 @@ const KIND = { online: 'Online', cancelled: 'Cancelled', postponed: 'Postponed' 
 let me = null, data = { halls: [], classes: [], moved: [], bookings: [] }, tab = 'free', openHall = null, postId = null, view = 'vFind';
 
 async function api(url, method = 'GET', body) {
+  if (method !== 'GET' && body === undefined) body = {};
   const res = await fetch(url, { method, headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
   let j = {}; try { j = await res.json(); } catch (e) {}
   if (res.status === 401 && url !== '/api/login') { showLogin(); throw new Error('Please sign in again.'); }
@@ -30,24 +31,26 @@ function menu(open) { $('drawer').classList.toggle('on', open); $('scrim').hidde
 $('menuBtn').addEventListener('click', () => menu(!$('drawer').classList.contains('on')));
 $('scrim').addEventListener('click', () => menu(false));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu(false); });
+let unread = 0;
+function buildNav() {
+  const tabs = me.role === 'admin' ? [['vDash', 'Dashboard'], ['vFind', 'Find a hall'], ['vAdmin', 'Manage'], ['vAccount', 'Account']]
+    : [['vFind', 'Find a hall'], ['vMine', 'My bookings'], ['vMsg', 'Message admin'], ['vAccount', 'Account']];
+  $('nav').innerHTML = tabs.map(([id, t]) => `<button data-v="${id}" class="${id === view ? 'on' : ''}">${t}${id === 'vDash' && unread ? `<span class="dot">${unread}</span>` : ''}</button>`).join('');
+}
 function showLogin() { me = null; menu(false); $('appView').hidden = true; $('loginView').hidden = false; $('lp').value = ''; }
 function showApp() {
   $('loginView').hidden = true; $('appView').hidden = false;
   $('avatar').textContent = me.name.trim().charAt(0).toUpperCase();
   $('whoName').textContent = me.name; $('whoProg').textContent = me.role === 'admin' ? 'Administrator' : me.programme;
-  const tabs = [['vFind', 'Find a hall'], ['vMine', me.role === 'admin' ? 'All bookings' : 'My bookings']];
-  if (me.role === 'admin') tabs.push(['vAdmin', 'Manage']);
-  tabs.push(['vAccount', 'Account']);
-  $('nav').innerHTML = tabs.map(([id, t]) => `<button data-v="${id}">${t}</button>`).join('');
   $('filters').hidden = innerWidth < 900;
-  go('vFind');
+  buildNav(); go(me.role === 'admin' ? 'vDash' : 'vFind');
 }
 function go(v) {
   view = v; menu(false);
-  ['vFind', 'vMine', 'vAdmin', 'vAccount'].forEach((id) => ($(id).hidden = id !== v));
+  ['vDash', 'vFind', 'vMine', 'vMsg', 'vAdmin', 'vAccount'].forEach((id) => ($(id).hidden = id !== v));
   document.querySelectorAll('#nav button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
   scrollTo(0, 0);
-  if (v === 'vFind') load(); if (v === 'vMine') loadMine(); if (v === 'vAdmin') loadAdmin();
+  if (v === 'vFind') load(); if (v === 'vMine') loadMine(); if (v === 'vAdmin') loadAdmin(); if (v === 'vDash') loadDash(); if (v === 'vMsg') loadMsgs();
 }
 $('nav').addEventListener('click', (e) => { if (e.target.dataset.v) go(e.target.dataset.v); });
 $('loginForm').addEventListener('submit', async (e) => {
@@ -215,6 +218,52 @@ $('ttGo').addEventListener('click', async () => {
     say('ttMsg', `${r.imported} classes imported from ${r.files} file(s).` + (r.skipped ? ` ${r.skipped} duplicate rows skipped.` : ''), true);
     $('ttFile').value = ''; loadAdmin();
   } catch (err) { say('ttMsg', err.message + (err.details ? ' ' + err.details.join(' ') : '')); }
+});
+
+// ---------- admin dashboard ----------
+const when = (ms) => new Date(ms).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+async function loadDash() {
+  try {
+    const [ov, bk, ms] = await Promise.all([api('/api/admin/overview'), api('/api/bookings'), api('/api/messages')]);
+    unread = ov.unread; buildNav();
+    $('dChanges').textContent = ov.changes.length; $('dBookings').textContent = bk.length; $('dUnread').textContent = ov.unread;
+    $('dChangeList').innerHTML = ov.changes.length ? ov.changes.map((c) => `<div class="item"><div class="l1"><b>${fmtDate(c.date)}</b> · ${hhmm(c.start_min)}–${hhmm(c.end_min)} · ${esc(c.hall)}</div>
+      <div class="l2">${esc(c.course)} <small>${esc(c.programme)}</small></div>
+      <div class="l3"><span class="chip">${KIND[c.kind]}${c.kind === 'postponed' ? ' to ' + fmtDate(c.new_date) + ' ' + hhmm(c.new_start) + '–' + hhmm(c.new_end) : ''}</span><small>by ${esc(c.by_name || 'unknown')}${c.created ? ' · ' + when(c.created) : ''}</small></div></div>`).join('')
+      : '<p class="muted">No class changes yet.</p>';
+    $('dBookList').innerHTML = bk.length ? bk.map((b) => `<div class="item"><div class="l1"><b>${fmtDate(b.date)}</b> · ${hhmm(b.start_min)}–${hhmm(b.end_min)} · ${esc(b.hall)}</div>
+      <div class="l2">${esc(b.purpose)}</div><div class="l3"><small>by ${esc(b.by_name)}</small><button class="mini" data-cancel="${b.id}">Cancel booking</button></div></div>`).join('')
+      : '<p class="muted">No upcoming bookings.</p>';
+    $('dMsgList').innerHTML = ms.length ? ms.map((m) => `<div class="item ${m.is_read ? '' : 'unread'}"><div class="l1"><b>${esc(m.name)}</b> <small>${esc(m.programme)} · ${when(m.created)}</small></div>
+      <div class="l2">${esc(m.body)}</div>${m.reply ? `<div class="reply">You replied: ${esc(m.reply)}</div>` : ''}
+      <div class="l3"><button class="mini" data-reply="${m.id}">Reply</button>${m.is_read ? '' : `<button class="mini" data-read="${m.id}">Mark read</button>`}<button class="mini" data-delmsg="${m.id}">Delete</button></div></div>`).join('')
+      : '<p class="muted">No messages.</p>';
+  } catch (e) { $('dChangeList').innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+}
+$('vDash').addEventListener('click', async (e) => {
+  const d = e.target.dataset;
+  try {
+    if (d.cancel) { if (!confirm('Cancel this booking?')) return; await api('/api/bookings/' + d.cancel, 'DELETE'); }
+    else if (d.read) await api(`/api/messages/${d.read}/read`, 'POST');
+    else if (d.delmsg) { if (!confirm('Delete this message?')) return; await api('/api/messages/' + d.delmsg, 'DELETE'); }
+    else if (d.reply) { const t = prompt('Your reply:'); if (!t) return; await api(`/api/messages/${d.reply}/reply`, 'POST', { text: t }); }
+    else return;
+    loadDash();
+  } catch (err) { alert(err.message); }
+});
+
+// ---------- rep: message the admin ----------
+async function loadMsgs() {
+  try {
+    const ms = await api('/api/messages');
+    $('msgList').innerHTML = ms.length ? ms.map((m) => `<div class="item"><div class="l1"><small>${when(m.created)}</small></div><div class="l2">${esc(m.body)}</div>${m.reply ? `<div class="reply"><b>Admin:</b> ${esc(m.reply)}</div>` : '<small>Waiting for a reply</small>'}</div>`).join('')
+      : '<div class="empty">No messages yet.</div>';
+  } catch (e) { $('msgList').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+$('msgForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try { await api('/api/messages', 'POST', { body: $('msgBody').value }); $('msgForm').reset(); say('msgMsg', 'Sent to the admin.', true); loadMsgs(); }
+  catch (err) { say('msgMsg', err.message); }
 });
 
 // ---------- account ----------

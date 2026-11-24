@@ -39,7 +39,8 @@ const cookies = (req) => Object.fromEntries((req.headers.cookie || '').split(';'
 const cookieOpts = () => `Path=/; HttpOnly; SameSite=Strict; Max-Age=${SESSION_MS / 1000}` + (PROD ? '; Secure' : '');
 
 app.use((req, res, next) => {
-  if (req.method !== 'GET' && !req.is('json')) return fail(res, 415, 'JSON requests only.');
+  const hasBody = Number(req.headers['content-length']) > 0 || req.headers['transfer-encoding'];
+  if (req.method !== 'GET' && hasBody && !req.is('json')) return fail(res, 415, 'JSON requests only.');
   const tok = cookies(req).sid;
   if (tok) {
     const u = one('SELECT u.id,u.username,u.name,u.role,u.programme FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.expires>?', tok, Date.now());
@@ -165,7 +166,7 @@ app.post('/api/releases', needUser, (req, res) => {
   }
   try {
     db.transaction(() => {
-      run('INSERT OR REPLACE INTO releases (class_id,date,by_user,kind,new_date,new_start,new_end) VALUES (?,?,?,?,?,?,?)', c.id, date, req.user.id, kind, nd, ns, ne);
+      run('INSERT OR REPLACE INTO releases (class_id,date,by_user,kind,new_date,new_start,new_end,created) VALUES (?,?,?,?,?,?,?,?)', c.id, date, req.user.id, kind, nd, ns, ne, Date.now());
       if (kind === 'postponed') { const err = clash(c.hall_id, nd, ns, ne, c.id); if (err) throw new Error(err); }
     })();
   } catch (e) { return fail(res, 409, e.message); }
@@ -228,6 +229,34 @@ app.post('/api/timetable/import', needAdmin, (req, res) => {
   res.json({ imported: r.imported, skipped: r.skipped, files: files.length });
 });
 app.get('/api/timetable/count', needAdmin, (req, res) => res.json(one('SELECT COUNT(*) AS n FROM classes')));
+
+// ---------- admin dashboard + messages ----------
+app.get('/api/admin/overview', needAdmin, (req, res) => {
+  const changes = all(`SELECT r.date,r.kind,r.new_date,r.new_start,r.new_end,r.created,c.course,c.programme,c.start_min,c.end_min,h.name AS hall,u.name AS by_name
+      FROM releases r JOIN classes c ON c.id=r.class_id JOIN halls h ON h.id=c.hall_id LEFT JOIN users u ON u.id=r.by_user
+      WHERE r.date>=? ORDER BY r.date,c.start_min`, nowParts().date);
+  res.json({ changes, unread: one('SELECT COUNT(*) AS n FROM messages WHERE is_read=0').n });
+});
+app.post('/api/messages', needUser, (req, res) => {
+  if (req.user.role !== 'rep') return fail(res, 403, 'Only programme reps send messages to the admin.');
+  const body = String((req.body || {}).body || '').trim().slice(0, 500);
+  if (!body) return fail(res, 400, 'Type a message first.');
+  if (one('SELECT COUNT(*) AS n FROM messages WHERE user_id=? AND created>?', req.user.id, Date.now() - 3600000).n >= 10) return fail(res, 429, 'Too many messages. Try again later.');
+  run('INSERT INTO messages (user_id,body,created) VALUES (?,?,?)', req.user.id, body, Date.now());
+  res.json({ ok: true });
+});
+app.get('/api/messages', needUser, (req, res) => {
+  const sel = 'SELECT m.id,m.body,m.created,m.is_read,m.reply,m.replied,u.name,u.programme FROM messages m JOIN users u ON u.id=m.user_id';
+  res.json(req.user.role === 'admin' ? all(sel + ' ORDER BY m.is_read ASC, m.created DESC LIMIT 200') : all(sel + ' WHERE m.user_id=? ORDER BY m.created DESC LIMIT 50', req.user.id));
+});
+app.post('/api/messages/:id/read', needAdmin, (req, res) => { run('UPDATE messages SET is_read=1 WHERE id=?', req.params.id); res.json({ ok: true }); });
+app.post('/api/messages/:id/reply', needAdmin, (req, res) => {
+  const text = String((req.body || {}).text || '').trim().slice(0, 500);
+  if (!text) return fail(res, 400, 'Type a reply first.');
+  run('UPDATE messages SET reply=?, replied=?, is_read=1 WHERE id=?', text, Date.now(), req.params.id);
+  res.json({ ok: true });
+});
+app.delete('/api/messages/:id', needAdmin, (req, res) => { run('DELETE FROM messages WHERE id=?', req.params.id); res.json({ ok: true }); });
 
 // ---------- static ----------
 const PUB = path.join(__dirname, 'public');
