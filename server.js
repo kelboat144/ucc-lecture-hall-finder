@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const path = require('path');
+const fs = require('fs');
 const db = require('./db');
 
 const app = express();
@@ -30,6 +31,8 @@ if (!one("SELECT id FROM users WHERE role='admin'")) {
   run("INSERT INTO users (username,name,password_hash,role) VALUES (?,?,?, 'admin')", username, 'Administrator', bcrypt.hashSync(pw, 11));
   console.log(`\nAdmin account created. Username: ${username}` + (process.env.ADMIN_PASSWORD ? '' : `  Password: ${pw}  (change it after first login)`) + '\n');
 }
+
+require('./bootstrap')(bcrypt);
 
 // ---------- sessions ----------
 const cookies = (req) => Object.fromEntries((req.headers.cookie || '').split(';').map((c) => c.trim().split('=')).filter((p) => p[0]).map(([k, ...v]) => [k, v.join('=')]));
@@ -88,20 +91,25 @@ app.get('/api/day', needUser, (req, res) => {
   if (!validDate(date)) return fail(res, 400, 'Invalid date.');
   res.json({
     halls: all('SELECT id,name,grp,seats FROM halls ORDER BY grp, CAST(SUBSTR(name, INSTR(name,\' \')+1) AS INTEGER)'),
-    classes: all(`SELECT c.id,c.hall_id,c.start_min,c.end_min,c.course,c.programme,
-        EXISTS(SELECT 1 FROM releases r WHERE r.class_id=c.id AND r.date=?) AS released
-        FROM classes c WHERE c.day=? ORDER BY c.start_min`, date, dow(date)),
+    classes: all(`SELECT c.id,c.hall_id,c.start_min,c.end_min,c.course,c.programme, r.kind, r.new_date, r.new_start, r.new_end,
+        (r.class_id IS NOT NULL) AS released
+        FROM classes c LEFT JOIN releases r ON r.class_id=c.id AND r.date=? WHERE c.day=? ORDER BY c.start_min`, date, dow(date)),
+    moved: all(`SELECT c.id,c.hall_id,r.new_start AS start_min,r.new_end AS end_min,c.course,c.programme,r.date AS from_date
+        FROM releases r JOIN classes c ON c.id=r.class_id WHERE r.kind='postponed' AND r.new_date=?`, date),
     bookings: all(`SELECT b.id,b.hall_id,b.start_min,b.end_min,b.purpose,b.user_id,u.name AS by_name
         FROM bookings b JOIN users u ON u.id=b.user_id WHERE b.date=? ORDER BY b.start_min`, date),
   });
 });
 
-function clash(hallId, date, s, e) {
+function clash(hallId, date, s, e, skipClass = 0) {
   const c = one(`SELECT course FROM classes c WHERE hall_id=? AND day=? AND start_min<? AND end_min>?
       AND NOT EXISTS (SELECT 1 FROM releases r WHERE r.class_id=c.id AND r.date=?)`, hallId, dow(date), e, s, date);
   if (c) return `The hall is in use for ${c.course} during that time.`;
   const b = one('SELECT start_min,end_min FROM bookings WHERE hall_id=? AND date=? AND start_min<? AND end_min>?', hallId, date, e, s);
   if (b) return `The hall is already booked ${fmt(b.start_min)}–${fmt(b.end_min)}.`;
+  const m = one(`SELECT c.course FROM releases r JOIN classes c ON c.id=r.class_id
+      WHERE r.kind='postponed' AND r.new_date=? AND c.hall_id=? AND r.new_start<? AND r.new_end>? AND r.class_id<>?`, date, hallId, e, s, skipClass);
+  if (m) return `A postponed class (${m.course}) is scheduled then.`;
   return null;
 }
 const inPast = (date, endMin) => { const n = nowParts(); return date < n.date || (date === n.date && endMin <= n.min); };
@@ -142,12 +150,25 @@ function canRelease(user, cls) {
   return user.role === 'admin' || (user.programme && cls.programme.trim().toLowerCase() === user.programme.trim().toLowerCase());
 }
 app.post('/api/releases', needUser, (req, res) => {
-  const { class_id, date } = req.body || {};
+  const { class_id, date, kind = 'online', new_date, new_start, new_end } = req.body || {};
   const c = one('SELECT * FROM classes WHERE id=?', class_id);
   if (!c || !validDate(String(date)) || dow(date) !== c.day) return fail(res, 400, 'That class does not meet on this date.');
-  if (!canRelease(req.user, c)) return fail(res, 403, 'You can only release classes for your own programme.');
+  if (!['online', 'cancelled', 'postponed'].includes(kind)) return fail(res, 400, 'Invalid change type.');
+  if (!canRelease(req.user, c)) return fail(res, 403, 'You can only change classes for your own programme.');
   if (inPast(date, c.end_min)) return fail(res, 400, 'That class has already ended.');
-  run('INSERT OR IGNORE INTO releases (class_id,date,by_user) VALUES (?,?,?)', c.id, date, req.user.id);
+  let nd = null, ns = null, ne = null;
+  if (kind === 'postponed') {
+    nd = String(new_date || ''); ns = parseTime(new_start); ne = parseTime(new_end);
+    if (!validDate(nd) || ns === null || ne === null || ne <= ns) return fail(res, 400, 'Enter a valid new date and time.');
+    if (inPast(nd, ne)) return fail(res, 400, 'The new time has already passed.');
+    if (nd === date && ns === c.start_min && ne === c.end_min) return fail(res, 400, 'The new time is the same as the original.');
+  }
+  try {
+    db.transaction(() => {
+      run('INSERT OR REPLACE INTO releases (class_id,date,by_user,kind,new_date,new_start,new_end) VALUES (?,?,?,?,?,?,?)', c.id, date, req.user.id, kind, nd, ns, ne);
+      if (kind === 'postponed') { const err = clash(c.hall_id, nd, ns, ne, c.id); if (err) throw new Error(err); }
+    })();
+  } catch (e) { return fail(res, 409, e.message); }
   res.json({ ok: true });
 });
 app.delete('/api/releases', needUser, (req, res) => {
@@ -155,8 +176,7 @@ app.delete('/api/releases', needUser, (req, res) => {
   const c = one('SELECT * FROM classes WHERE id=?', class_id);
   if (!c) return fail(res, 404, 'Class not found.');
   if (!canRelease(req.user, c)) return fail(res, 403, 'You can only restore classes for your own programme.');
-  const hit = clash(c.hall_id, date, c.start_min, c.end_min);
-  if (hit && hit.startsWith('The hall is already booked')) return fail(res, 409, 'Someone has booked the hall for this time, so the class cannot be restored.');
+  if (clash(c.hall_id, date, c.start_min, c.end_min, c.id)) return fail(res, 409, 'The hall has been taken for this time, so the class cannot be restored.');
   run('DELETE FROM releases WHERE class_id=? AND date=?', c.id, date);
   res.json({ ok: true });
 });
@@ -196,62 +216,25 @@ app.patch('/api/halls/:id', needAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
-function parseCsv(text) {
-  const rows = []; let row = [], cell = '', q = false;
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (q) { if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (ch === '"') q = false; else cell += ch; }
-    else if (ch === '"') q = true;
-    else if (ch === ',') { row.push(cell); cell = ''; }
-    else if (ch === '\n' || ch === '\r') { if (ch === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
-    else cell += ch;
-  }
-  if (cell || row.length) { row.push(cell); rows.push(row); }
-  return rows.filter((r) => r.some((c) => c.trim()));
-}
-const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const { importTimetable } = require('./timetable');
 
 // CSV columns: hall, day, start, end, course, programme. Accepts {files:[{name,csv}]} or a single {csv}.
 app.post('/api/timetable/import', needAdmin, (req, res) => {
   const body = req.body || {};
   const files = (Array.isArray(body.files) ? body.files : [{ name: 'file', csv: body.csv || '' }]).slice(0, 50);
-  const replace = body.replace !== false;
-  const halls = new Map(all('SELECT id,name FROM halls').map((h) => [h.name.toLowerCase().replace(/\s+/g, ''), h.id]));
-  const errors = [], out = [], seen = new Set();
-  if (!replace) all('SELECT hall_id,day,start_min,end_min,course FROM classes').forEach((c) => seen.add([c.hall_id, c.day, c.start_min, c.end_min, c.course].join('|')));
-  let skipped = 0;
-  for (const f of files) {
-    const name = String(f.name || 'file').slice(0, 60);
-    const rows = parseCsv(String(f.csv || ''));
-    const hasHeader = rows.length && /^hall$/i.test(rows[0][0].trim());
-    if (hasHeader) rows.shift();
-    rows.forEach((r, i) => {
-      const line = i + 1 + (hasHeader ? 1 : 0);
-      const [hall = '', day = '', st = '', en = '', course = '', prog = ''] = r.map((c) => c.trim());
-      const hid = halls.get(hall.toLowerCase().replace(/\s+/g, ''));
-      const d = DAYS.indexOf(day.slice(0, 3).toLowerCase()), s = parseTime(st), e = parseTime(en);
-      if (!hid) errors.push(`${name}, line ${line}: unknown hall "${hall}".`);
-      else if (d < 0) errors.push(`${name}, line ${line}: unknown day "${day}".`);
-      else if (s === null || e === null || e <= s) errors.push(`${name}, line ${line}: invalid times "${st}–${en}".`);
-      else if (!course) errors.push(`${name}, line ${line}: course is missing.`);
-      else {
-        const key = [hid, d, s, e, course.slice(0, 80)].join('|');
-        if (seen.has(key)) skipped++; else { seen.add(key); out.push([hid, d, s, e, course.slice(0, 80), prog.slice(0, 80)]); }
-      }
-    });
-  }
-  if (errors.length) return res.status(400).json({ error: `${errors.length} problem(s) found. Nothing was imported.`, details: errors.slice(0, 20) });
-  if (!out.length && !skipped) return fail(res, 400, 'The files contain no timetable rows.');
-  db.transaction(() => {
-    if (replace) run('DELETE FROM classes');
-    const ins = db.prepare('INSERT INTO classes (hall_id,day,start_min,end_min,course,programme) VALUES (?,?,?,?,?,?)');
-    out.forEach((o) => ins.run(...o));
-  })();
-  res.json({ imported: out.length, skipped, files: files.length });
+  const r = importTimetable(files, body.replace !== false);
+  if (r.errors.length) return res.status(400).json({ error: `${r.errors.length} problem(s) found. Nothing was imported.`, details: r.errors.slice(0, 20) });
+  if (!r.imported && !r.skipped) return fail(res, 400, 'The files contain no timetable rows.');
+  res.json({ imported: r.imported, skipped: r.skipped, files: files.length });
 });
 app.get('/api/timetable/count', needAdmin, (req, res) => res.json(one('SELECT COUNT(*) AS n FROM classes')));
 
 // ---------- static ----------
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: PROD ? '1h' : 0 }));
+const PUB = path.join(__dirname, 'public');
+if (fs.existsSync(PUB)) app.use(express.static(PUB, { maxAge: PROD ? '1h' : 0 }));
+else { // flat layout (files uploaded without folders): serve only the three page files
+  app.get(['/', '/index.html'], (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+  ['app.js', 'style.css'].forEach((f) => app.get('/' + f, (req, res) => res.sendFile(path.join(__dirname, f))));
+}
 app.use((err, req, res, next) => { console.error(err); fail(res, 500, 'Something went wrong. Please try again.'); });
-app.listen(PORT, () => console.log(`Hall Finder running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Lecture Hall Finder running on port ${PORT}`));

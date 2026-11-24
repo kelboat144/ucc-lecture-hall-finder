@@ -57,6 +57,10 @@ CREATE INDEX IF NOT EXISTS idx_classes_hall_day ON classes(hall_id, day);
 CREATE INDEX IF NOT EXISTS idx_bookings_date ON bookings(date, hall_id);
 `);
 
+for (const col of ["kind TEXT NOT NULL DEFAULT 'online'", 'new_date TEXT', 'new_start INTEGER', 'new_end INTEGER']) {
+  try { db.exec('ALTER TABLE releases ADD COLUMN ' + col); } catch (e) { /* already there */ }
+}
+
 // Halls are created once. Seat counts start at 0 and are set by the admin.
 const GROUPS = [['SWLT', 19], ['NLT', 18], ['LT', 22], ['CALC', 11]];
 if (db.prepare('SELECT COUNT(*) AS n FROM halls').get().n === 0) {

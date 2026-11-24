@@ -1,0 +1,15 @@
+{
+  "name": "ucc-hall-finder",
+  "version": "1.0.0",
+  "description": "Lecture Hall Finder: lecture hall availability and booking for programme representatives",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sample": "node sample-data.js"
+  },
+  "engines": { "node": ">=22.13 <25" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2"
+  }
+}
