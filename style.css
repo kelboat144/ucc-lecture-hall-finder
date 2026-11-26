@@ -192,3 +192,236 @@ input,select,textarea{background:var(--field)}
 .item details{font-size:.78rem;color:var(--mute);margin-top:4px}.item pre{white-space:pre-wrap;margin:4px 0 0}
 .checks{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0}
 .checks label{flex-direction:row;align-items:center;gap:6px;font-size:.85rem;color:var(--ink)}
+
+/* =========================================================
+   UCC LECTURE HALL FINDER — UI REDESIGN
+   Presentation-only overrides. Existing HTML and JavaScript
+   behavior, API calls, permissions and workflows are unchanged.
+   Palette: #007AAD / #D9E2E9 / #FFFBFC / #0C1D32
+   ========================================================= */
+:root{
+  --navy:#0c1d32;
+  --navy2:#123b61;
+  --gold:#007aad;
+  --ink:#10263d;
+  --fill:#075d91;
+  --fill2:#007aad;
+  --head:#fffbfc;
+  --bg:#edf2f6;
+  --card:#fffbfc;
+  --line:#d9e2e9;
+  --mute:#627487;
+  --r:16px;
+  --g-bg:#fffbfc;
+  --g-strong:#fffbfc;
+  --g-bd:#d9e2e9;
+  --g-sh:0 5px 18px rgba(12,29,50,.055);
+  --g-sh-h:0 12px 28px rgba(12,29,50,.11);
+  --g-hi:none;
+  --blur:none;
+  --blur-strong:none;
+  --track:#e5edf3;
+  --head-g:#fffbfc;
+  --field:#fff;
+  --mesh-o:0;
+}
+[data-theme=dark]{
+  --navy:#071321;
+  --navy2:#102b45;
+  --gold:#35a4d2;
+  --ink:#e8f0f6;
+  --fill:#0876a8;
+  --fill2:#1595c8;
+  --head:#102238;
+  --bg:#091827;
+  --card:#102238;
+  --line:#294158;
+  --mute:#a3b5c5;
+  --g-bg:#102238;
+  --g-strong:#102238;
+  --g-bd:#294158;
+  --g-sh:0 5px 18px rgba(0,0,0,.2);
+  --g-sh-h:0 12px 28px rgba(0,0,0,.3);
+  --track:#20394f;
+  --head-g:#102238;
+  --field:#142b41;
+}
+body{font-size:14px;line-height:1.5;background:var(--bg);color:var(--ink)}
+body::before{display:none}
+button,input,select,textarea{font-family:inherit}
+button{transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+:focus-visible{outline:3px solid #42a9d2;outline-offset:2px}
+
+/* Desktop application frame */
+@media (min-width:901px){
+  #drawer{
+    position:fixed;inset:0 auto 0 0;width:260px;max-width:260px;
+    transform:none;z-index:25;padding:22px 14px 16px;gap:18px;
+    background:#0c1d32;color:#f5f8fb;border:0;border-right:1px solid rgba(255,255,255,.08);
+    box-shadow:5px 0 24px rgba(12,29,50,.12);border-radius:0;
+  }
+  #drawer::before{
+    content:"UCC";display:block;color:#fff;font-size:27px;font-weight:850;
+    letter-spacing:-.04em;padding:8px 12px 18px 56px;
+    border-bottom:1px solid rgba(255,255,255,.13);
+    background:radial-gradient(circle at 22px 24px,#007aad 0 17px,transparent 18px);
+    position:relative;
+  }
+  #drawer::after{
+    content:"UNIVERSITY OF CAPE COAST";display:block;position:absolute;top:59px;left:70px;
+    color:#b9c9d7;font-size:8px;letter-spacing:.08em;font-weight:700;
+  }
+  .who{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:13px}
+  .who b{color:#fff}
+  .who span{color:#83c8e5}
+  #nav{gap:5px}
+  #nav button{color:#dce7ef;border:0;border-radius:10px;padding:11px 13px;border-left:3px solid transparent}
+  #nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+  #nav button.on{background:#075d91;color:#fff;border-left-color:#70c7e8}
+  .signout{margin-top:auto;color:#e7f0f6;border-color:rgba(255,255,255,.22);border-radius:10px}
+  .signout:hover{background:rgba(255,255,255,.1)}
+  .top{margin-left:260px;padding:12px 26px;min-height:68px;background:var(--head);color:var(--ink);box-shadow:0 2px 12px rgba(12,29,50,.045);border-bottom:1px solid var(--line)}
+  .top .brand{font-size:18px;color:var(--ink);letter-spacing:-.025em}
+  .top .brand::after{display:none}
+  .icon{color:var(--ink);border-radius:10px}
+  .icon:hover{background:var(--bg)}
+  .avatar{background:#075d91;color:#fff;box-shadow:none;width:36px;height:36px}
+  main{margin:0 0 0 260px;max-width:none;width:calc(100% - 260px);padding:24px 26px 44px}
+}
+#scrim{z-index:30}
+#drawer{transition:transform .22s ease}
+
+/* Panels and typography */
+.panel,.stat,.tabs,.hall,.item,.empty,.login-card{
+  background:var(--card);border:1px solid var(--line);box-shadow:var(--g-sh);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+.panel{padding:18px;margin-bottom:16px;border-radius:16px}
+.panel h2{font-size:16px;font-weight:800;letter-spacing:-.02em;margin-bottom:13px;color:var(--ink)}
+h2,h3{letter-spacing:-.02em}
+.muted,small{color:var(--mute)}
+label{font-size:12px;color:var(--mute);gap:6px}
+input,select,textarea{min-height:42px;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--field)}
+input:focus,select:focus,textarea:focus{border-color:#1688b8;outline:3px solid rgba(0,122,173,.12)}
+.btn{background:#075d91;color:#fff;border-radius:10px;min-height:40px;padding:9px 16px;box-shadow:none}
+.btn:hover{background:#007aad;transform:translateY(-1px)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--bg)}
+.mini{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--card);color:var(--ink)}
+.mini:hover{background:#e5f4fa;border-color:#8cc9e1;color:#075d91}
+[data-theme=dark] .mini:hover{background:#183c55;color:#bdeaff}
+.empty{padding:22px;border-style:dashed;border-radius:13px}
+
+/* Dashboard overview */
+#vDash:not([hidden]){display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr);gap:16px;align-items:start}
+#vDash>.stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0}
+#vDash>.panel{margin:0;min-width:0}
+#vDash>.panel:nth-of-type(2){grid-column:1}
+#vDash>.panel:nth-of-type(3){grid-column:2}
+#vDash>.panel:nth-of-type(4){grid-column:1}
+#vDash>.panel:nth-of-type(5){grid-column:2}
+.stat{min-height:88px;padding:16px 18px;border-radius:15px;gap:5px}
+.stat b{font-size:29px;line-height:1.05;color:var(--ink);font-weight:800}
+.stat span{font-size:11px;font-weight:750;color:var(--mute);letter-spacing:.07em;text-transform:uppercase}
+.stat.gold,.stat.gold b,.stat.gold span{background:#e7f4fa;color:#075d91;border-color:#c9e6f1}
+[data-theme=dark] .stat.gold,[data-theme=dark] .stat.gold b,[data-theme=dark] .stat.gold span{background:#15364d;color:#9cdef6;border-color:#28546d}
+.item{padding:12px 14px;border-radius:12px;margin-bottom:9px}
+.item .l1{font-weight:750}
+.item .l2{font-size:13px}
+.item .acts{margin-top:9px}
+.item.unread{border-left:4px solid #007aad}
+.scroll{max-height:390px}
+.dot,.cnt{background:#d9eff8;color:#075d91}
+
+/* Hall finder and cards */
+.when{padding:18px;gap:12px;grid-template-columns:1fr 1fr auto auto}
+.filters{padding:16px;gap:14px}
+.stats{gap:12px;margin-bottom:14px}
+#vFind>.stats .stat{min-height:76px}
+.tabs{max-width:440px;padding:4px;border-radius:11px;margin-bottom:14px}
+.tabs button{padding:9px 15px;border-radius:8px}
+.tabs button.on{background:#075d91;color:#fff}
+.grid{gap:14px;grid-template-columns:repeat(auto-fill,minmax(270px,1fr))}
+.hall{padding:16px;border-radius:15px;box-shadow:0 3px 14px rgba(12,29,50,.05)}
+.hall:hover{box-shadow:0 10px 24px rgba(12,29,50,.1);transform:translateY(-2px)}
+.hall.open:hover{transform:none}
+.hall h3{font-size:16px;font-weight:800}
+.hall p{font-size:12px}
+.badge{font-size:11px;padding:5px 10px;border-radius:999px}
+.badge.free{background:#e3f5ed;color:#16734d;box-shadow:none}
+.badge.taken{background:#fff0ed;color:#b4483b}
+[data-theme=dark] .badge.free{background:#163d32;color:#8ce0ba}
+[data-theme=dark] .badge.taken{background:#482b2a;color:#ffb4a8}
+.tl{height:8px;background:var(--track)}
+.tl i{background:#d45d51}
+.tl u{background:#007aad;box-shadow:none}
+.detail{border-top:1px solid var(--line);padding-top:14px}
+.chip{background:#e5f4fa;color:#075d91;border-radius:7px;padding:4px 8px}
+.chip.line{border-color:#9acddd;color:#075d91}
+.chip.warn{background:#fff3d8;color:#8a5b00}
+[data-theme=dark] .chip{background:#183c55;color:#a9e4fa}
+[data-theme=dark] .chip.warn{background:#49391c;color:#ffdb8b}
+
+/* Tables, forms, settings and messages */
+.tbl{border:1px solid var(--line);border-radius:12px}
+td,th{padding:11px 10px}
+th{background:var(--bg)}
+.prefs{gap:18px}
+textarea{min-height:94px}
+.narrow{max-width:520px}
+.gold-note{border-left:4px solid #007aad}
+.row-actions{margin:10px 0 14px}
+.seatgrid{gap:12px}
+.pw input{padding-right:65px}
+.eye{color:var(--mute)}
+.meter{background:var(--track)}
+.meter i{background:#007aad}
+
+/* Login screen */
+.login-wrap{background:var(--bg);grid-template-columns:1.05fr .95fr}
+.brand-panel{background:linear-gradient(145deg,#0c1d32,#075d91);padding:clamp(30px,6vw,76px)}
+.brand-panel h1{font-size:clamp(2rem,4vw,3.1rem);letter-spacing:-.04em}
+.brand-panel p{line-height:1.7;color:#d8e8f1}
+.brand-panel svg{color:#9bd8ef}
+.login-card{width:min(430px,90%);padding:30px;border-radius:18px;gap:15px}
+.login-card h2{font-size:25px}
+.login-card .btn{width:100%;margin-top:4px}
+
+@media(max-width:900px){
+  #drawer{background:#0c1d32;color:#f5f8fb}
+  .who{background:rgba(255,255,255,.09)}
+  .who b{color:#fff}
+  #nav button{color:#e1ebf2}
+  #nav button.on{background:#075d91;color:#fff;border-left-color:#70c7e8}
+  .signout{color:#fff;border-color:rgba(255,255,255,.25)}
+  .top{background:var(--head);color:var(--ink);border-bottom:1px solid var(--line)}
+  .top .brand{color:var(--ink)}
+  .icon{color:var(--ink)}
+  .avatar{background:#075d91;color:#fff}
+  main{padding:18px 16px 34px}
+  #vDash:not([hidden]){grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .top{gap:8px;padding:9px 12px}
+  .top .brand{font-size:15px}
+  main{padding:13px 11px 28px}
+  .panel{padding:14px;margin-bottom:12px}
+  #vDash:not([hidden]){display:flex;flex-direction:column;gap:12px}
+  #vDash>.stats{width:100%;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  #vDash>.stats .stat{padding:11px 9px;min-height:76px}
+  #vDash>.stats .stat b{font-size:23px}
+  #vDash>.stats .stat span{font-size:9px;letter-spacing:.03em}
+  #vDash>.panel{width:100%}
+  .when{grid-template-columns:1fr 1fr}
+  .when .btn{width:100%}
+  .filters{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .stat b{font-size:23px}
+  .login-wrap{grid-template-columns:1fr}
+  .brand-panel{padding:30px 22px;min-height:230px}
+  .brand-panel h1{font-size:2rem}
+  .login-card{padding:25px 20px;margin:10px auto 28px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;transition:none!important}
+}
