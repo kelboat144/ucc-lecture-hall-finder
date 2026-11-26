@@ -25,14 +25,10 @@ const say = (id, text, ok) => { const el = $(id); if (!el) return; el.textConten
 const ask = (q, def) => { const v = prompt(q, def || ''); return v === null ? null : v.trim(); };
 
 // ---------- theme + glass ----------
-function applyTheme(t) { document.documentElement.dataset.theme = t; document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#081226' : '#0f2a4f'; }
+function applyTheme(t) { document.documentElement.dataset.theme = t; document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#07131f' : '#0c1d32'; }
 let savedTheme = null; try { savedTheme = localStorage.getItem('theme'); } catch (e) {}
 applyTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
 $('themeBtn').addEventListener('click', () => { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; applyTheme(t); try { localStorage.setItem('theme', t); } catch (e) {} });
-function applyGlass(on) { document.documentElement.dataset.glass = on ? 'on' : 'off'; $('glassToggle').checked = on; }
-let savedGlass = null; try { savedGlass = localStorage.getItem('glass'); } catch (e) {}
-applyGlass(savedGlass !== 'off');
-$('glassToggle').addEventListener('change', (e) => { applyGlass(e.target.checked); try { localStorage.setItem('glass', e.target.checked ? 'on' : 'off'); } catch (err) {} });
 
 // show / hide password buttons
 document.addEventListener('click', (e) => {
@@ -42,31 +38,57 @@ document.addEventListener('click', (e) => {
 });
 
 // ---------- shell ----------
-function menu(open) { $('drawer').classList.toggle('on', open); $('scrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', open); }
-$('menuBtn').addEventListener('click', () => menu(!$('drawer').classList.contains('on')));
+const IC = {
+  home: 'M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10',
+  search: 'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM21 21l-4.3-4.3',
+  cal: 'M7 3v4M17 3v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z',
+  msg: 'M4 5h16v11H9l-5 4z',
+  bell: 'M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0',
+  manage: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 4v6M9 14v6',
+  audit: 'M9 4h6l1 2h3v14H5V6h3zM9 12h6M9 16h4',
+  user: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 3.5-6 8-6s8 2 8 6',
+  key: 'M14 10a4 4 0 1 0-3.9 4L21 14v3h-3v3h-3v-3h-2.5',
+  building: 'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6',
+  clock: 'M12 7v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',
+  check: 'M5 13l4 4L19 7',
+  swap: 'M17 3l3 3-3 3M20 6H8a4 4 0 0 0-4 4v1M7 21l-3-3 3-3M4 18h12a4 4 0 0 0 4-4v-1',
+  info: 'M12 11v5M12 8v.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'
+};
+const ic = (n, z = 20) => `<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
+const ago = (ms) => { const m = Math.floor((Date.now() - ms) / 60000); return m < 1 ? 'just now' : m < 60 ? `${m}m ago` : m < 1440 ? `${Math.floor(m / 60)}h ago` : `${Math.floor(m / 1440)}d ago`; };
+const wideScreen = () => innerWidth >= 901;
+const navCounts = {};
+function setBadge(v, n) { navCounts[v] = n; const b = document.querySelector(`#nav [data-v=${v}] .nb`); if (b) { b.textContent = n > 99 ? '99+' : n; b.hidden = !n; } }
+// phones/tablets: slide-out drawer. Desktop: the sidebar stays, and the menu button collapses it.
+function menu(open) { if (wideScreen()) return; $('drawer').classList.toggle('on', open); $('scrim').hidden = !open; $('menuBtn').setAttribute('aria-expanded', open); }
+function collapseSide(on) { document.body.classList.toggle('collapsed', on); $('menuBtn').setAttribute('aria-expanded', !on); try { localStorage.setItem('side', on ? 'off' : 'on'); } catch (e) {} }
+try { if (localStorage.getItem('side') === 'off') document.body.classList.add('collapsed'); } catch (e) {}
+$('menuBtn').addEventListener('click', () => (wideScreen() ? collapseSide(!document.body.classList.contains('collapsed')) : menu(!$('drawer').classList.contains('on'))));
 $('scrim').addEventListener('click', () => menu(false));
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') menu(false); });
 $('bellBtn').addEventListener('click', () => go('vNotif'));
-function setBell(n) { $('bellCnt').textContent = n > 99 ? '99+' : n; $('bellCnt').hidden = !n; }
+function setBell(n) { $('bellCnt').textContent = n > 99 ? '99+' : n; $('bellCnt').hidden = !n; setBadge('vNotif', n); }
 function showLogin() { me = null; clearInterval(pollTimer); menu(false); $('appView').hidden = true; $('loginView').hidden = false; $('lp').value = ''; }
 function buildNav() {
   let tabs;
-  if (me.must_change) tabs = [['vAccount', 'Choose a password']];
-  else if (me.role === 'pr') tabs = [['vFind', 'Find a hall'], ['vMine', 'My bookings'], ['vMsg', 'Message admin'], ['vNotif', 'Notifications'], ['vAccount', 'Account']];
+  if (me.must_change) tabs = [['vAccount', 'Choose a password', 'key']];
+  else if (me.role === 'pr') tabs = [['vDash', 'Dashboard', 'home'], ['vFind', 'Search Halls', 'search'], ['vMine', 'My Bookings', 'cal'], ['vMsg', 'Messages', 'msg'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']];
   else {
-    tabs = [['vDash', 'Dashboard'], ['vFind', 'Find a hall']];
-    if (me.role === 'super' || me.role === 'main') tabs.push(['vManage', 'Manage']);
-    tabs.push(['vAudit', 'Audit log'], ['vNotif', 'Notifications'], ['vAccount', 'Account']);
+    tabs = [['vDash', 'Dashboard', 'home'], ['vFind', 'Search Halls', 'search']];
+    if (me.role === 'super' || me.role === 'main') tabs.push(['vManage', 'Manage', 'manage']);
+    tabs.push(['vAudit', 'Audit Log', 'audit'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']);
   }
-  $('nav').innerHTML = tabs.map(([id, t]) => `<button data-v="${id}" class="${id === view ? 'on' : ''}">${t}</button>`).join('');
+  $('nav').innerHTML = tabs.map(([id, t, i]) => `<button data-v="${id}" class="${id === view ? 'on' : ''}">${ic(i, 22)}<span class="nl">${t}</span><span class="nb" hidden>0</span></button>`).join('');
+  Object.entries(navCounts).forEach(([v, n]) => setBadge(v, n));
   return tabs[0][0];
 }
 function showApp() {
   $('loginView').hidden = true; $('appView').hidden = false;
-  $('avatar').textContent = me.name.trim().charAt(0).toUpperCase();
+  const ini = me.name.trim().split(/\s+/).slice(0, 2).map((w) => w.charAt(0)).join('').toUpperCase();
+  $('avatar').textContent = ini; $('profAvatar').textContent = ini; $('roleTxt').textContent = ROLE[me.role]; $('profName').textContent = me.name; $('profRole').textContent = ROLE[me.role]; $('profProg').textContent = me.programme || '';
   $('whoName').textContent = me.name; $('whoProg').textContent = ROLE[me.role] + (me.programme ? ' · ' + me.programme : '');
   $('filters').hidden = innerWidth < 900; $('bellBtn').hidden = !!me.must_change;
-  view = me.must_change ? 'vAccount' : (me.role === 'pr' ? 'vFind' : 'vDash');
+  view = me.must_change ? 'vAccount' : 'vDash';
   buildNav(); go(view);
   clearInterval(pollTimer);
   pollTimer = setInterval(async () => {                       // notifications show up without a reload
@@ -84,7 +106,7 @@ function go(v) {
   ({ vFind: load, vMine: loadMine, vMsg: loadMsgs, vDash: loadDash, vManage: loadManage, vAudit: loadAudit, vNotif: loadNotif }[v] || (() => {}))();
   if (!me.must_change) api('/api/me').then((m) => setBell(m.unread)).catch(() => {});
 }
-$('nav').addEventListener('click', (e) => { if (e.target.dataset.v) go(e.target.dataset.v); });
+$('nav').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) go(b.dataset.v); });
 
 // ---------- login (with the 258-second lock countdown) ----------
 function lockCountdown(secs) {
@@ -224,35 +246,111 @@ $('mine').addEventListener('click', async (e) => {
   } catch (err) { alert(err.message); }
 });
 
-// ---------- staff dashboard ----------
+// ---------- dashboard (staff and representatives) ----------
+const pill = (b) => ({
+  pending: `<span class="pill pend">${ic('clock', 14)}Pending</span>`,
+  approved: `<span class="pill ok">${ic('check', 14)}Approved</span>`,
+  alternative: '<span class="pill warn">Alternative offered</span>',
+  rejected: '<span class="pill off">Rejected</span>',
+  cancelled: '<span class="pill off">Cancelled</span>'
+}[b.status] || '');
+const brow = (b, sub, actions) => `<div class="brow"><div class="bthumb">${ic('building', 28)}</div>
+  <div class="bmain"><b>${esc(b.hall)}</b><div class="bmeta"><span>${ic('cal', 14)}${fmtDate(b.date)}</span><span>${ic('clock', 14)}${hhmm(b.start_min)} – ${hhmm(b.end_min)}</span></div><div class="bsub">${sub}</div></div>
+  <div class="bside">${pill(b)}${actions ? `<div class="acts">${actions}</div>` : ''}</div></div>`;
+const crow = (c) => `<div class="crow"><span class="cico">${ic('swap', 18)}</span><div><b>${esc(c.course)}</b><div class="bmeta"><span>${c.date ? fmtDate(c.date) + ' · ' : ''}${hhmm(c.s)} – ${hhmm(c.e)} · ${esc(c.hall || '')}</span></div><small>${esc(c.prog || '')}${c.by ? ' · by ' + esc(c.by) : ''}</small></div><span class="pill ok">${esc(c.chip)}</span></div>`;
+const changeChip = (c) => KIND[c.kind] + (c.kind === 'postponed' ? ' to ' + fmtDate(c.new_date) + ' ' + hhmm(c.new_start) : '');
+const infoBox = (t) => `<div class="infobox">${ic('info', 20)}<span>${t}</span></div>`;
+
+function setHero() {
+  const h = new Date().getHours(), part = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  $('heroTitle').textContent = `Good ${part}, ${me.name}! 👋`;
+  $('heroSub').textContent = me.role === 'pr' ? 'Find and book the perfect lecture hall for your programme.' : 'Here is what needs your attention today.';
+}
+function prepQuick() {
+  const n = new Date();
+  if (!$('dqDate').value) $('dqDate').value = localDate(n);
+  if (!$('dqTime').value) $('dqTime').value = hhmm(n.getHours() * 60 + n.getMinutes());
+  $('dqGroup').innerHTML = $('group').innerHTML;
+}
+function renderActivity(list) {
+  $('dActList').innerHTML = list.length ? list.slice(0, 4).map((n) => `<div class="act" data-link="${esc(n.link)}"><i class="${/approv/i.test(n.title) ? 'g' : n.is_read ? 'r' : ''}"></i><div><b>${esc(n.title)}</b><span>${esc(n.body)}</span></div><small>${ago(n.created)}</small></div>`).join('') : infoBox('Nothing yet. Updates will appear here.');
+}
 async function loadDash() {
-  try {
-    const [ov, bk] = await Promise.all([api('/api/admin/overview'), has('bookings.view') || has('bookings.decide') ? api('/api/bookings').catch(() => []) : []]);
-    const pend = bk.filter((b) => b.status === 'pending' || b.status === 'alternative'), appr = bk.filter((b) => b.status === 'approved');
-    $('dPend').textContent = pend.length; $('dBook').textContent = appr.length; $('dChg').textContent = ov.changes.length;
-    const age = (ms) => { const h = Math.floor((Date.now() - ms) / 3600000); return h >= 24 ? `waiting ${Math.floor(h / 24)}d` : h >= 1 ? `waiting ${h}h` : 'new'; };
-    $('dPendList').innerHTML = pend.length ? pend.map((b) => `<div class="item"><div class="l1">${slot(b)}</div><div class="l2">${esc(b.purpose)} <small>${esc(b.by_name)} · ${esc(b.programme)}</small></div>
-      <div class="l3"><span class="chip ${Date.now() - b.created > 86400000 ? 'warn' : 'line'}">${b.status === 'alternative' ? 'Alternative offered' : 'Pending'} · ${age(b.created)}</span></div>
-      ${b.status === 'pending' && has('bookings.decide') ? `<div class="acts"><button class="mini" data-dec="approve" data-id="${b.id}">Approve</button><button class="mini" data-dec="reject" data-id="${b.id}">Reject</button><button class="mini" data-dec="alternative" data-id="${b.id}" data-hall="${esc(b.hall)}" data-date="${b.date}" data-s="${hhmm(b.start_min)}" data-e="${hhmm(b.end_min)}">Suggest alternative</button></div>` : ''}</div>`).join('')
-      : `<p class="muted">${has('bookings.view') ? 'No requests waiting.' : 'You have not been given access to booking requests.'}</p>`;
-    $('dBookList').innerHTML = appr.length ? appr.map((b) => `<div class="item"><div class="l1">${slot(b)}</div><div class="l2">${esc(b.purpose)} <small>${esc(b.by_name)}</small></div>
-      <div class="l3">${b.cancel_req ? `<span class="chip warn">Cancellation requested: ${esc(b.cancel_req)}</span>` : ''}${has('bookings.cancel') ? `<button class="mini" data-cancel="${b.id}">${b.cancel_req ? 'Confirm cancellation' : 'Cancel booking'}</button>` : ''}</div></div>`).join('')
-      : '<p class="muted">No approved bookings.</p>';
-    $('dChgList').innerHTML = ov.changes.length ? ov.changes.map((c) => `<div class="item"><div class="l1"><b>${fmtDate(c.date)}</b> · ${hhmm(c.start_min)}–${hhmm(c.end_min)} · ${esc(c.hall)}</div><div class="l2">${esc(c.course)} <small>${esc(c.programme)}</small></div>
-      <div class="l3"><span class="chip">${KIND[c.kind]}${c.kind === 'postponed' ? ' to ' + fmtDate(c.new_date) + ' ' + hhmm(c.new_start) + '–' + hhmm(c.new_end) : ''}</span><small>by ${esc(c.by_name || 'unknown')}${c.created ? ' · ' + when(c.created) : ''}</small></div></div>`).join('') : '<p class="muted">No class changes yet.</p>';
-    $('dMsgPanel').hidden = !has('messages.handle');
-    if (has('messages.handle')) {
-      const ms = await api('/api/messages');
-      $('dUnread').hidden = !ov.unread; $('dUnread').textContent = ov.unread;
-      $('dMsgList').innerHTML = ms.length ? ms.map((m) => `<div class="item ${m.is_read ? '' : 'unread'}"><div class="l1"><b>${esc(m.name)}</b> <small>${esc(m.programme)} · ${when(m.created)}</small></div><div class="l2">${esc(m.body)}</div>${m.reply ? `<div class="reply">Reply: ${esc(m.reply)}</div>` : ''}
-        <div class="acts"><button class="mini" data-reply="${m.id}">Reply</button>${m.is_read ? '' : `<button class="mini" data-read="${m.id}">Mark read</button>`}</div></div>`).join('') : '<p class="muted">No messages.</p>';
-    }
-  } catch (e) { $('dPendList').innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
+  const rep = me.role === 'pr';
+  setHero(); prepQuick();
+  ['dBookPanel', 'dMsgPanel'].forEach((id) => ($(id).hidden = rep));
+  $('dViewAll').hidden = !rep;
+  $('dChgTitle').textContent = rep ? 'Class changes (today)' : 'Class changes (today onwards)';
+  try { rep ? await loadRepDash() : await loadStaffDash(); }
+  catch (e) { $('dPendList').innerHTML = infoBox(esc(e.message)); }
+}
+async function loadRepDash() {
+  const today = localDate();
+  const [bk, notes, day] = await Promise.all([api('/api/bookings'), api('/api/notifications').catch(() => []), api('/api/day?date=' + today).catch(() => null)]);
+  const open = bk.filter((b) => ['pending', 'alternative', 'approved'].includes(b.status));
+  const pend = open.filter((b) => b.status !== 'approved'), appr = open.filter((b) => b.status === 'approved');
+  const mineProg = (p) => !me.programme || (p || '').trim().toLowerCase() === me.programme.trim().toLowerCase();
+  let ch = [];
+  if (day) {
+    const names = Object.fromEntries(day.halls.map((h) => [h.id, h.name]));
+    ch = [
+      ...day.classes.filter((c) => c.released && mineProg(c.programme)).map((c) => ({ date: today, s: c.start_min, e: c.end_min, hall: names[c.hall_id], course: c.course, prog: c.programme, chip: changeChip(c) })),
+      ...day.moved.filter((c) => mineProg(c.programme)).map((c) => ({ date: today, s: c.start_min, e: c.end_min, hall: names[c.hall_id], course: c.course, prog: c.programme, chip: 'Moved here' }))
+    ].sort((a, b) => a.s - b.s);
+  }
+  const unreadMsgs = notes.filter((n) => !n.is_read && n.link === 'msg').length;
+  $('dPend').textContent = pend.length; $('dBook').textContent = appr.length; $('dChg').textContent = ch.length; $('dMsgCnt').textContent = unreadMsgs;
+  setBadge('vMine', pend.length); setBadge('vMsg', unreadMsgs);
+  const shown = [...pend, ...appr].sort((a, b) => a.date.localeCompare(b.date) || a.start_min - b.start_min).slice(0, 4);
+  $('dPendList').innerHTML = shown.length ? shown.map((b) => brow(b, esc(b.purpose), `<button class="btn sm" data-rview="1">View</button>${b.status === 'pending' ? `<button class="btn sm ghost" data-rcancel="${b.id}" data-st="pending">Cancel</button>` : b.status === 'approved' && !b.cancel_req ? `<button class="btn sm ghost" data-rcancel="${b.id}" data-st="approved">Ask to cancel</button>` : ''}`)).join('')
+    : infoBox('No booking requests yet. Use Search halls to find a hall and send a request.');
+  $('dChgList').innerHTML = ch.length ? ch.map(crow).join('') : infoBox('No class changes yet.');
+  renderActivity(notes);
+}
+async function loadStaffDash() {
+  const [ov, bk, notes] = await Promise.all([api('/api/admin/overview'), has('bookings.view') || has('bookings.decide') ? api('/api/bookings').catch(() => []) : [], api('/api/notifications').catch(() => [])]);
+  const pend = bk.filter((b) => b.status === 'pending' || b.status === 'alternative'), appr = bk.filter((b) => b.status === 'approved');
+  $('dPend').textContent = pend.length; $('dBook').textContent = appr.length; $('dChg').textContent = ov.changes.length; $('dMsgCnt').textContent = has('messages.handle') ? ov.unread || 0 : 0;
+  const age = (ms) => { const h = Math.floor((Date.now() - ms) / 3600000); return h >= 24 ? `waiting ${Math.floor(h / 24)}d` : h >= 1 ? `waiting ${h}h` : 'new'; };
+  $('dPendList').innerHTML = pend.length ? pend.map((b) => brow(b, `${esc(b.purpose)} <small>${esc(b.by_name)} · ${esc(b.programme)} · ${age(b.created)}</small>`,
+    b.status === 'pending' && has('bookings.decide') ? `<button class="btn sm" data-dec="approve" data-id="${b.id}">Approve</button><button class="btn sm ghost" data-dec="reject" data-id="${b.id}">Reject</button><button class="btn sm ghost" data-dec="alternative" data-id="${b.id}" data-hall="${esc(b.hall)}" data-date="${b.date}" data-s="${hhmm(b.start_min)}" data-e="${hhmm(b.end_min)}">Suggest alternative</button>` : '')).join('')
+    : infoBox(has('bookings.view') ? 'No requests waiting.' : 'You have not been given access to booking requests.');
+  $('dBookList').innerHTML = appr.length ? appr.map((b) => brow(b, `${esc(b.purpose)} <small>${esc(b.by_name)}</small>${b.cancel_req ? ` <span class="pill warn">Cancellation requested: ${esc(b.cancel_req)}</span>` : ''}`,
+    has('bookings.cancel') ? `<button class="btn sm ghost" data-cancel="${b.id}">${b.cancel_req ? 'Confirm cancellation' : 'Cancel booking'}</button>` : '')).join('') : infoBox('No approved bookings.');
+  $('dChgList').innerHTML = ov.changes.length ? ov.changes.map((c) => crow({ date: c.date, s: c.start_min, e: c.end_min, hall: c.hall, course: c.course, prog: c.programme, chip: changeChip(c), by: c.by_name || 'unknown' })).join('') : infoBox('No class changes yet.');
+  renderActivity(notes);
+  $('dMsgPanel').hidden = !has('messages.handle');
+  if (has('messages.handle')) {
+    const ms = await api('/api/messages');
+    $('dUnread').hidden = !ov.unread; $('dUnread').textContent = ov.unread;
+    $('dMsgList').innerHTML = ms.length ? ms.map((m) => `<div class="item ${m.is_read ? '' : 'unread'}"><div class="l1"><b>${esc(m.name)}</b> <small>${esc(m.programme)} · ${when(m.created)}</small></div><div class="l2">${esc(m.body)}</div>${m.reply ? `<div class="reply">Reply: ${esc(m.reply)}</div>` : ''}
+      <div class="acts"><button class="mini" data-reply="${m.id}">Reply</button>${m.is_read ? '' : `<button class="mini" data-read="${m.id}">Mark read</button>`}</div></div>`).join('') : infoBox('No messages.');
+  }
 }
 $('vDash').addEventListener('click', async (e) => {
-  const d = e.target.dataset;
+  const card = e.target.closest('.statc');
+  if (card) {
+    const t = me.role === 'pr' ? card.dataset.rep : card.dataset.staff;
+    if (t && t.startsWith('v')) go(t); else if (t && $(t) && !$(t).hidden) $(t).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  const act = e.target.closest('.act[data-link]');
+  if (act) { const t = LINKS[act.dataset.link]; if (t && document.querySelector(`#nav [data-v=${t}]`)) go(t); else go('vNotif'); return; }
+  const g = e.target.closest('[data-goto]'); if (g) return go(g.dataset.goto);
+  if (e.target.closest('#ctaGo')) return go('vFind');
+  if (e.target.closest('#dqGo')) {
+    $('date').value = $('dqDate').value || localDate(); $('time').value = $('dqTime').value || $('time').value;
+    $('group').value = $('dqGroup').value; $('seats').value = $('dqSeats').value;
+    return go('vFind');
+  }
+  const btn = e.target.closest('button'); if (!btn) return;
+  const d = btn.dataset;
   try {
-    if (d.dec) {
+    if (d.rview) return go('vMine');
+    if (d.rcancel) {
+      const r = ask(d.st === 'approved' ? 'Reason for asking to cancel (needed for approved bookings):' : 'Reason (optional):'); if (r === null) return;
+      await api(`/api/bookings/${d.rcancel}/cancel`, 'POST', { reason: r });
+    } else if (d.dec) {
       const reason = ask({ approve: 'Reason for approving:', reject: 'Reason for rejecting:', alternative: 'Reason for suggesting another slot:' }[d.dec], d.dec === 'approve' ? 'Hall is free' : '');
       if (!reason) return;
       const body = { decision: d.dec, reason };
