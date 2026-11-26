@@ -18,8 +18,8 @@
     <form id="loginForm" class="login-card" autocomplete="on">
       <h2>Sign in</h2>
       <label>Username <input id="lu" autocomplete="username" required></label>
-      <label>Password <input id="lp" type="password" autocomplete="current-password" required></label>
-      <button class="btn" type="submit">Sign in</button>
+      <label>Password <span class="pw"><input id="lp" type="password" autocomplete="current-password" required><button type="button" class="eye" data-eye>Show</button></span></label>
+      <button class="btn" id="loginBtn" type="submit">Sign in</button>
       <p class="msg" id="loginMsg" role="alert"></p>
     </form>
   </div>
@@ -31,6 +31,7 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
     <div class="brand">Lecture Hall Finder</div>
+    <button id="bellBtn" class="icon" aria-label="Notifications"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><span id="bellCnt" class="cnt" hidden>0</span></button>
     <button id="themeBtn" class="icon" aria-label="Switch light or dark mode"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
     <div class="avatar" id="avatar" aria-hidden="true"></div>
   </header>
@@ -44,27 +45,17 @@
   <main>
     <section id="vDash" hidden>
       <div class="stats">
-        <div class="stat gold"><b id="dChanges">0</b><span>Class changes</span></div>
-        <div class="stat"><b id="dBookings">0</b><span>Bookings</span></div>
-        <div class="stat"><b id="dUnread">0</b><span>Unread</span></div>
+        <div class="stat gold"><b id="dPend">0</b><span>Pending</span></div>
+        <div class="stat"><b id="dBook">0</b><span>Approved</span></div>
+        <div class="stat"><b id="dChg">0</b><span>Class changes</span></div>
       </div>
-      <div class="panel"><h2>Class changes (today onwards)</h2><div id="dChangeList" class="scroll"></div></div>
-      <div class="panel"><h2>Bookings (today onwards)</h2><div id="dBookList" class="scroll"></div></div>
-      <div class="panel"><h2>Messages from reps</h2><div id="dMsgList" class="scroll"></div></div>
+      <div class="panel"><h2>Booking requests</h2><div id="dPendList" class="scroll"></div></div>
+      <div class="panel"><h2>Approved bookings</h2><div id="dBookList" class="scroll"></div></div>
+      <div class="panel"><h2>Class changes (today onwards)</h2><div id="dChgList" class="scroll"></div></div>
+      <div class="panel" id="dMsgPanel"><h2>Messages from reps <span id="dUnread" class="dot" hidden></span></h2><div id="dMsgList" class="scroll"></div></div>
     </section>
 
-    <section id="vMsg" hidden>
-      <form id="msgForm" class="panel narrow">
-        <h2>Message the admin</h2>
-        <textarea id="msgBody" rows="3" maxlength="500" placeholder="Short note, e.g. our Monday class is online this week" required></textarea>
-        <button class="btn" type="submit">Send</button>
-        <p class="msg" id="msgMsg"></p>
-      </form>
-      <h2>Your messages</h2>
-      <div id="msgList"></div>
-    </section>
-
-    <section id="vFind">
+    <section id="vFind" hidden>
       <div class="panel when">
         <label>Date <input type="date" id="date"></label>
         <label>Time <input type="time" id="time"></label>
@@ -83,42 +74,78 @@
       <div id="list" class="grid"></div>
     </section>
 
-    <section id="vMine" hidden><h2>Upcoming bookings</h2><div id="mine"></div></section>
+    <section id="vMine" hidden><h2>My booking requests</h2><div id="mine"></div></section>
 
-    <section id="vAdmin" hidden>
+    <section id="vMsg" hidden>
+      <form id="msgForm" class="panel narrow">
+        <h2>Message the Main Admin</h2>
+        <textarea id="msgBody" rows="3" maxlength="500" placeholder="Short note, e.g. our Monday class is online this week" required></textarea>
+        <button class="btn" type="submit">Send</button>
+        <p class="msg" id="msgMsg"></p>
+      </form>
+      <h2>Your messages</h2><div id="msgList"></div>
+    </section>
+
+    <section id="vManage" hidden>
       <div class="panel">
-        <h2>Add a user</h2>
+        <h2>Add an account</h2>
         <form id="userForm" class="cols">
-          <label>Full name <input id="un" required></label>
-          <label>Username <input id="uu" required></label>
-          <label>Role <select id="ur"><option value="rep">Programme rep</option><option value="admin">Administrator</option></select></label>
-          <label>Programme <input id="up" placeholder="BSc Computer Science L200"></label>
-          <label class="wide">Temporary password (8+ characters) <input id="upw" minlength="8" required></label>
-          <button class="btn wide" type="submit">Create user</button>
+          <label>Full name or class name <input id="un" required></label>
+          <label>Username (cannot be changed later) <input id="uu" required autocapitalize="none"></label>
+          <label>Role <select id="ur"></select></label>
+          <label id="upWrap">Programme / class <input id="up" placeholder="BSc Computer Science L200"></label>
+          <label class="wide">Temporary password (6+ characters, must be changed at first sign-in)
+            <span class="pw"><input id="upw" type="password" minlength="6" required><button type="button" class="eye" data-eye>Show</button></span></label>
+          <button class="btn wide" type="submit">Create account</button>
           <p class="msg wide" id="userMsg"></p>
         </form>
-        <div class="tbl" id="users"></div>
       </div>
-      <div class="panel">
-        <h2>Timetable</h2>
-        <p class="muted">Upload one or many CSV files at once (hold Ctrl or Shift, or select several on your phone). Columns: <code>hall, day, start, end, course, programme</code>.</p>
+      <div class="panel"><h2>Accounts</h2><div id="users" class="scroll"></div></div>
+      <div id="permEditor" class="panel" hidden></div>
+      <div class="panel" id="ttPanel">
+        <h2>Official timetable</h2>
+        <p class="muted">Only the Super Admin publishes the timetable. Columns: <code>hall, day, start, end, course, programme</code>. Select several CSV files at once if needed.</p>
         <p id="ttCount" class="muted"></p>
         <input type="file" id="ttFile" accept=".csv,text/csv" multiple>
         <label class="inline"><input type="checkbox" id="ttReplace" checked> Replace the existing timetable</label>
-        <button class="btn" id="ttGo">Import timetable</button>
+        <button class="btn" id="ttGo">Publish timetable</button>
         <p class="msg" id="ttMsg"></p>
       </div>
-      <div class="panel"><h2>Hall seat counts</h2><div id="halls" class="seatgrid"></div></div>
+      <div class="panel" id="seatPanel"><h2>Hall seat counts</h2><div id="halls" class="seatgrid"></div></div>
+    </section>
+
+    <section id="vAudit" hidden>
+      <div class="panel filters">
+        <label>Area <select id="aMod"><option value="">All</option><option>bookings</option><option>classes</option><option>users</option><option>security</option><option>halls</option><option>timetables</option></select></label>
+        <label>Severity <select id="aSev"><option value="">All</option><option>info</option><option>warning</option><option>critical</option></select></label>
+        <label>Who <input id="aWho" placeholder="name"></label>
+        <label>Action <input id="aAct" placeholder="e.g. suspended"></label>
+        <label>From <input type="date" id="aFrom"></label>
+        <button class="btn" id="aGo">Show</button>
+      </div>
+      <div id="auditList"></div>
+    </section>
+
+    <section id="vNotif" hidden>
+      <div class="panel"><h2>Notification settings</h2><div id="prefs" class="prefs"></div><p class="muted">Security alerts are always on.</p></div>
+      <div class="row-actions"><h2>Notifications</h2><button class="mini" id="readAll">Mark all read</button></div>
+      <div id="notifList"></div>
     </section>
 
     <section id="vAccount" hidden>
+      <div id="forceBanner" class="panel gold-note" hidden><b>Choose your own password to continue.</b> The temporary one you were given must be replaced.</div>
       <form id="pwForm" class="panel narrow">
         <h2>Change password</h2>
-        <label>Current password <input id="pc" type="password" autocomplete="current-password" required></label>
-        <label>New password (8+ characters) <input id="pn" type="password" autocomplete="new-password" minlength="8" required></label>
+        <label>Current password <span class="pw"><input id="pc" type="password" autocomplete="current-password" required><button type="button" class="eye" data-eye>Show</button></span></label>
+        <label>New password <span class="pw"><input id="pn" type="password" autocomplete="new-password" minlength="6" required><button type="button" class="eye" data-eye>Show</button></span></label>
+        <div class="meter"><i id="pwBar"></i></div><small id="pwHint" class="muted">Pick anything you will remember. A longer password is stronger.</small>
         <button class="btn" type="submit">Update password</button>
         <p class="msg" id="pwMsg"></p>
       </form>
+      <div class="panel narrow">
+        <h2>Appearance</h2>
+        <label class="inline"><input type="checkbox" id="glassToggle" checked> Glass effect (turn off if the app feels slow)</label>
+      </div>
     </section>
   </main>
 </div>

@@ -18,9 +18,14 @@ module.exports = function bootstrap(bcrypt) {
   db.prepare("UPDATE halls SET seats = CASE grp WHEN 'SWLT' THEN 250 WHEN 'NLT' THEN 180 WHEN 'LT' THEN 120 ELSE 60 END WHERE seats = 0").run();
   const pw = process.env.REP_PASSWORD, f = path.join(dir, 'reps.json');
   if (pw && pw.length >= 8 && fs.existsSync(f)) {
-    const ins = db.prepare("INSERT OR IGNORE INTO users (username,name,password_hash,role,programme) VALUES (?,?,?,'rep',?)");
+    const ins = db.prepare("INSERT OR IGNORE INTO users (username,name,password_hash,role,programme,must_change,created) VALUES (?,?,?,'pr',?,1,strftime('%s','now')*1000)");
     const hash = bcrypt.hashSync(pw, 10);
     JSON.parse(fs.readFileSync(f, 'utf8')).forEach((u) => ins.run(u.username, u.name, hash, u.programme));
     console.log('Programme rep accounts created from seed/reps.json.');
   } else console.log('No REP_PASSWORD (8+ characters) set, so no rep accounts were created. Add them in Manage.');
+  const mp = process.env.MAIN_ADMIN_PASSWORD;
+  if (mp && mp.length >= 6) {
+    db.prepare("INSERT OR IGNORE INTO users (username,name,password_hash,role,must_change,created) VALUES ('mainadmin','Main Admin',?,'main',1,strftime('%s','now')*1000)").run(bcrypt.hashSync(mp, 10));
+    console.log('Main Admin account created (username: mainadmin).');
+  }
 };
