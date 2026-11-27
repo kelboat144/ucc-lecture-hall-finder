@@ -153,6 +153,36 @@ CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_log(created);
 }
 if (db.prepare('PRAGMA user_version').get().user_version < 2) migrate2();
 
+// ---------- version 3: maintenance, extensions, timetable review, calendar, reports, security ----------
+function migrate3() {
+  db.exec('BEGIN');
+  try {
+    for (const [t, c] of [['bookings', 'ext_end INTEGER'], ['bookings', 'ext_reason TEXT'], ['bookings', 'ext_conflict TEXT'], ['bookings', 'release_req INTEGER NOT NULL DEFAULT 0'],
+      ['bookings', 'released_at INTEGER'], ['bookings', 'alt_kind TEXT'], ['bookings', 'alt_state TEXT'], ['bookings', 'maint_note TEXT'], ['sessions', 'last_seen INTEGER'], ['users', 'last_device TEXT']]) {
+      try { db.exec(`ALTER TABLE ${t} ADD COLUMN ${c}`); } catch (e) { /* exists */ }
+    }
+    db.exec(`
+CREATE TABLE IF NOT EXISTS hall_blocks (id INTEGER PRIMARY KEY, hall_id INTEGER NOT NULL REFERENCES halls(id), start_at TEXT NOT NULL, end_at TEXT, reason TEXT NOT NULL,
+  created_by INTEGER, created INTEGER NOT NULL, cleared_at INTEGER, cleared_by INTEGER, clear_reason TEXT);
+CREATE TABLE IF NOT EXISTS ts_submissions (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), programme TEXT NOT NULL, filename TEXT, csv TEXT NOT NULL,
+  row_count INTEGER NOT NULL, report TEXT, status TEXT NOT NULL DEFAULT 'pending', reviewed_by INTEGER, reviewed_at INTEGER, reason TEXT, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS timetable_versions (id INTEGER PRIMARY KEY, created INTEGER NOT NULL, created_by TEXT, note TEXT, rows_json TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS academic_years (id INTEGER PRIMARY KEY, label TEXT NOT NULL UNIQUE, start_date TEXT NOT NULL, end_date TEXT NOT NULL,
+  auto INTEGER NOT NULL DEFAULT 1, transitioned_at INTEGER);
+CREATE TABLE IF NOT EXISTS calendar_periods (id INTEGER PRIMARY KEY, year_id INTEGER NOT NULL REFERENCES academic_years(id), kind TEXT NOT NULL, label TEXT NOT NULL,
+  start_date TEXT NOT NULL, end_date TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), category TEXT NOT NULL, body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'open', findings TEXT, created INTEGER NOT NULL, updated INTEGER);
+CREATE TABLE IF NOT EXISTS petitions (id INTEGER PRIMARY KEY, user_id INTEGER NOT NULL REFERENCES users(id), ref TEXT, body TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'open', response TEXT, created INTEGER NOT NULL, decided INTEGER);
+`);
+    db.exec('PRAGMA user_version = 3');
+    db.exec('COMMIT');
+  } catch (e) { db.exec('ROLLBACK'); throw e; }
+}
+if (db.prepare('PRAGMA user_version').get().user_version < 3) migrate3();
+db.dir = dir;
+
 // Halls are created once. Seat counts start at 0 and are set by the admin.
 const GROUPS = [['SWLT', 19], ['NLT', 18], ['LT', 22], ['CALC', 11]];
 if (db.prepare('SELECT COUNT(*) AS n FROM halls').get().n === 0) {

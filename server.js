@@ -4,7 +4,8 @@ const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 const db = require('./db');
-const { importTimetable } = require('./timetable');
+const tt = require('./timetable');
+const { importTimetable } = tt;
 
 const app = express();
 const PROD = process.env.NODE_ENV === 'production';
@@ -39,6 +40,14 @@ function audit(actor, module, action, target, reason, before, after, severity = 
   run('INSERT INTO audit_log (actor_id,actor_name,actor_role,module,action,target,reason,before,after,severity,created) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
     actor ? actor.id : null, actor ? actor.name : 'System', actor ? actor.role : 'system', module, action, target || '', reason || '',
     before ? JSON.stringify(before) : null, after ? JSON.stringify(after) : null, severity, Date.now());
+}
+// Alerts the Super Admin when one person does the same sensitive thing too often. An alert is a prompt to look, not proof of misconduct.
+function watch(actor, action, minutes, n, text) {
+  const k = one('SELECT COUNT(*) AS n FROM audit_log WHERE actor_id=? AND action=? AND created>?', actor.id, action, Date.now() - minutes * 60000).n;
+  if (k === n) {
+    audit(null, 'security', 'suspicious_activity', actor.username, text, null, { who: actor.name, action, count: n }, 'warning');
+    all("SELECT id FROM users WHERE role='super' AND status='active'").forEach((u) => notify(u.id, 'security', 'Unusual activity', `${actor.name}: ${text}. This is a prompt to look, not proof of misconduct.`, 'sec'));
+  }
 }
 function notify(userId, cat, title, body = '', link = '') {
   if (cat !== 'security') { const p = one('SELECT enabled FROM notif_prefs WHERE user_id=? AND category=?', userId, cat); if (p && !p.enabled) return; }
@@ -75,8 +84,8 @@ app.use((req, res, next) => {
   if (req.method !== 'GET' && hasBody && !req.is('json')) return fail(res, 415, 'JSON requests only.');
   const tok = cookies(req).sid;
   if (tok) {
-    const u = one(`SELECT u.id,u.username,u.name,u.role,u.programme,u.level,u.status,u.must_change FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.expires>?`, tok, Date.now());
-    if (u && u.status === 'active') { req.user = u; req.token = tok; }
+    const u = one(`SELECT u.id,u.username,u.name,u.role,u.programme,u.level,u.status,u.must_change,s.last_seen FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token=? AND s.expires>?`, tok, Date.now());
+    if (u && u.status === 'active') { req.user = u; req.token = tok; if (!u.last_seen || Date.now() - u.last_seen > 60000) run('UPDATE sessions SET last_seen=? WHERE token=?', Date.now(), tok); }
   }
   next();
 });
@@ -85,8 +94,9 @@ const needUser = (req, res, next) => {
   if (req.user.must_change && !['/api/me', '/api/password', '/api/logout'].includes(req.path)) return fail(res, 403, 'Change your temporary password first.', { must_change: true });
   next();
 };
-const needRole = (...roles) => (req, res, next) => (req.user && roles.includes(req.user.role) ? next() : fail(res, 403, 'You do not have access to this.'));
-const needPerm = (key) => (req, res, next) => (req.user && can(req.user, key) ? next() : fail(res, 403, 'You have not been given permission for this.'));
+const denied = (req, res, msg) => { if (req.user) { audit(req.user, 'security', 'access_denied', req.path, '', null, null, 'warning'); watch(req.user, 'access_denied', 10, 5, '5 attempts to reach restricted functions in 10 minutes'); } return fail(res, 403, msg); };
+const needRole = (...roles) => (req, res, next) => (req.user && roles.includes(req.user.role) ? next() : denied(req, res, 'You do not have access to this.'));
+const needPerm = (key) => (req, res, next) => (req.user && can(req.user, key) ? next() : denied(req, res, 'You have not been given permission for this.'));
 const staff = needRole('super', 'main', 'delegated');
 
 // ---------- login: username only, 3 wrong passwords = 258 s lock, one active session ----------
@@ -125,6 +135,12 @@ app.post('/api/login', (req, res) => {
   const dev = device(req);
   run('INSERT INTO sessions (token,user_id,expires,device) VALUES (?,?,?,?)', token, u.id, Date.now() + SESSION_MS, dev);
   audit(u, 'security', prev ? 'login_replaced_session' : 'login', u.username, '', null, { device: dev });
+  const devKey = dev.replace(/ \(.*\)$/, '');
+  if (['main', 'delegated'].includes(u.role) && u.last_device && u.last_device !== devKey) {
+    audit(null, 'security', 'new_device_login', u.username, `${u.name} signed in from a device not used before: ${dev}`, null, null, 'warning');
+    superIds().forEach((id) => notify(id, 'security', 'Administrator signed in on a new device', `${u.name} (${u.role}) used ${dev}. A prompt to check, not proof of a problem.`, 'sec'));
+  }
+  run('UPDATE users SET last_device=? WHERE id=?', devKey, u.id);
   if (prev) notify(u.id, 'security', 'New sign-in on your account', `Signed in on ${dev}. Your previous session was ended. If this was not you, contact your administrator.`, '');
   res.setHeader('Set-Cookie', `sid=${token}; ${cookieOpts()}`);
   res.json(publicUser(u));
@@ -180,6 +196,8 @@ app.get('/api/day', needUser, (req, res) => {
         FROM releases r JOIN classes c ON c.id=r.class_id WHERE r.kind='postponed' AND r.new_date=?`, date),
     bookings: all(`SELECT b.id,b.hall_id,b.start_min,b.end_min,b.purpose,b.user_id,u.name AS by_name
         FROM bookings b JOIN users u ON u.id=b.user_id WHERE b.date=? AND b.status='approved' ORDER BY b.start_min`, date),
+    blocks: all('SELECT hall_id,start_at,end_at,reason FROM hall_blocks WHERE cleared_at IS NULL AND start_at<=? AND (end_at IS NULL OR end_at>?)', date + 'T23:59', date + 'T00:00').map((b) => ({ hall_id: b.hall_id, reason: b.reason,
+      start_min: b.start_at.startsWith(date) ? parseTime(b.start_at.slice(11)) : 0, end_min: b.end_at && b.end_at.startsWith(date) ? parseTime(b.end_at.slice(11)) : 1440 })),
     pending: all(`SELECT b.id,b.hall_id,b.start_min,b.end_min,b.purpose,b.user_id,b.status,u.name AS by_name
         FROM bookings b JOIN users u ON u.id=b.user_id WHERE b.date=? AND b.status IN ('pending','alternative') ORDER BY b.start_min`, date),
   });
@@ -187,6 +205,8 @@ app.get('/api/day', needUser, (req, res) => {
 
 // Only approved bookings occupy a hall. Pending requests never block anyone.
 function clash(hallId, date, s, e, skipClass = 0, skipBooking = 0) {
+  const bl = one('SELECT reason FROM hall_blocks WHERE hall_id=? AND cleared_at IS NULL AND start_at<? AND (end_at IS NULL OR end_at>?)', hallId, `${date}T${fmt(e)}`, `${date}T${fmt(s)}`);
+  if (bl) return `The hall is unavailable (${bl.reason}).`;
   const c = one(`SELECT course FROM classes c WHERE hall_id=? AND day=? AND start_min<? AND end_min>?
       AND NOT EXISTS (SELECT 1 FROM releases r WHERE r.class_id=c.id AND r.date=?)`, hallId, dow(date), e, s, date);
   if (c) return `The hall is in use for ${c.course} during that time.`;
@@ -224,7 +244,7 @@ app.post('/api/bookings', needUser, needRole('pr'), (req, res) => {
 app.get('/api/bookings', needUser, (req, res) => {
   const n = nowParts();
   const sel = `SELECT b.id,b.hall_id,b.date,b.start_min,b.end_min,b.purpose,b.status,b.decision_reason,b.cancel_req,b.created,b.user_id,
-      b.alt_hall,b.alt_date,b.alt_start,b.alt_end,h.name AS hall,u.name AS by_name,u.programme,ah.name AS alt_hall_name
+      b.alt_hall,b.alt_date,b.alt_start,b.alt_end,b.alt_kind,b.alt_state,b.maint_note,b.ext_end,b.ext_reason,b.ext_conflict,b.release_req,h.name AS hall,u.name AS by_name,u.programme,ah.name AS alt_hall_name
       FROM bookings b JOIN halls h ON h.id=b.hall_id JOIN users u ON u.id=b.user_id LEFT JOIN halls ah ON ah.id=b.alt_hall
       WHERE (b.date>? OR (b.date=? AND b.end_min>?))`;
   if (req.user.role === 'pr') return res.json(all(sel + ' AND b.user_id=? ORDER BY b.date,b.start_min', n.date, n.date, n.min, req.user.id));
@@ -300,6 +320,7 @@ app.post('/api/bookings/:id/cancel', needUser, (req, res) => {
   if (!why) return fail(res, 400, 'A reason is required to cancel a booking.');
   run("UPDATE bookings SET status='cancelled', decided_by=?, decided_at=?, decision_reason=?, cancel_req=NULL WHERE id=?", req.user.id, Date.now(), why, b.id);
   audit(req.user, 'bookings', 'cancelled', `booking #${b.id}`, why, { status: b.status, slot: slotText(b) }, { status: 'cancelled' });
+  watch(req.user, 'cancelled', 60, 5, '5 booking cancellations within an hour');
   notify(b.user_id, 'bookings', 'Booking cancelled', `${slotText(b)} was cancelled. Reason: ${why}`, 'mine');
   res.json({ ok: true, status: 'cancelled' });
 });
@@ -387,6 +408,7 @@ app.post('/api/users/:id/status', needUser, needRole('super', 'main'), (req, res
   run('UPDATE users SET status=?, status_reason=?, status_by_role=? WHERE id=?', status, why, req.user.role, t.id);
   if (status !== 'active') run('DELETE FROM sessions WHERE user_id=?', t.id);
   audit(req.user, 'users', status === 'active' ? 'reinstated' : status, t.username, why, { status: t.status }, { status }, status === 'active' ? 'info' : 'warning');
+  if (status === 'suspended') watch(req.user, 'suspended', 60, 3, '3 suspensions within an hour');
   res.json({ ok: true });
 });
 app.post('/api/users/:id/deactivate', needUser, needRole('super', 'main'), (req, res) => {   // archive: history is kept, nothing is erased
@@ -418,6 +440,7 @@ app.post('/api/users/:id/permissions', needUser, needRole('super', 'main'), (req
     perms.forEach((p) => run('INSERT INTO permissions (user_id,perm,expires,granted_by) VALUES (?,?,?,?)', t.id, p, expires, req.user.id));
   })();
   audit(req.user, 'users', 'permissions_changed', t.username, clean((req.body || {}).reason, 300), { perms: before }, { perms, expires: exp || 'none' }, 'warning');
+  watch(req.user, 'permissions_changed', 10, 3, '3 permission changes within 10 minutes');
   res.json({ ok: true });
 });
 
@@ -433,6 +456,7 @@ app.patch('/api/halls/:id', needUser, staff, needPerm('halls.manage'), (req, res
 app.post('/api/timetable/import', needUser, needRole('super'), (req, res) => {   // only the Super Admin publishes the official timetable
   const body = req.body || {};
   const files = (Array.isArray(body.files) ? body.files : [{ name: 'file', csv: body.csv || '' }]).slice(0, 50);
+  tt.snapshot('Before an upload by the Super Admin', req.user.name);
   const r = importTimetable(files, body.replace !== false);
   if (r.errors.length) return res.status(400).json({ error: `${r.errors.length} problem(s) found. Nothing was imported.`, details: r.errors.slice(0, 20) });
   if (!r.imported && !r.skipped) return fail(res, 400, 'The files contain no timetable rows.');
@@ -487,6 +511,8 @@ app.get('/api/audit', needUser, staff, (req, res) => {
   if (q.from && validDate(String(q.from))) { where.push('created>=?'); p.push(Date.parse(q.from + 'T00:00:00Z')); }
   res.json(all(`SELECT id,actor_name,actor_role,module,action,target,reason,before,after,severity,created FROM audit_log ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY id DESC LIMIT 200`, ...p));
 });
+
+require('./ops')(app, { db, all, one, run, fmt, parseTime, validDate, dow, nowParts, inPast, fail, clean, audit, notify, superIds, deciderIds, needUser, needRole, needPerm, staff, can, clash, hallName, hallByName, slotText, bcrypt, crypto, tt, watch });
 
 // ---------- static ----------
 const PUB = path.join(__dirname, 'public');

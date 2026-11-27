@@ -114,6 +114,14 @@
         </div>
 
         <div class="panel span-6" id="dBookPanel"><div class="phead"><h2>Approved bookings</h2></div><div id="dBookList" class="scroll"></div></div>
+        <div class="panel" id="dMaintPanel" style="grid-column:1/-1"><div class="phead"><h2>Hall maintenance</h2></div>
+          <form id="mForm" class="cols">
+            <label>Hall <input id="mHall" placeholder="e.g. NLT 5" required></label>
+            <label>Unavailable from <input type="datetime-local" id="mFrom" required></label>
+            <label>Until (empty = until cleared) <input type="datetime-local" id="mTo"></label>
+            <label>Reason <input id="mWhy" placeholder="repairs, cleaning, electrical fault, safety" required></label>
+            <button class="btn wide" type="submit">Mark unavailable</button><p class="msg wide" id="mMsg"></p>
+          </form><div id="dMaintList" class="scroll"></div></div>
         <div class="panel span-6" id="dMsgPanel"><div class="phead"><h2>Messages from reps <span id="dUnread" class="dot" hidden></span></h2></div><div id="dMsgList" class="scroll"></div></div>
       </div>
     </section>
@@ -175,6 +183,60 @@
         <p class="msg" id="ttMsg"></p>
       </div>
       <div class="panel" id="seatPanel"><h2>Hall seat counts</h2><div id="halls" class="seatgrid"></div></div>
+    </section>
+
+    <section id="vTT" hidden>
+      <div id="ttPr">
+        <div class="panel"><div class="phead"><h2>My official timetable</h2></div><div id="myTT" class="scroll"></div></div>
+        <div class="panel narrow"><h2>Submit a timetable</h2>
+          <p class="muted">CSV columns: <code>hall, day, start, end, course, programme</code>. It is only a proposal until the Super Admin approves it. Your programme is <b id="myProg"></b>.</p>
+          <input type="file" id="tsFile" accept=".csv,text/csv"><button class="btn" id="tsGo">Submit for review</button><p class="msg" id="tsMsg"></p></div>
+        <h2 class="pg">My submissions</h2><div id="tsList"></div>
+      </div>
+      <div id="ttSuper">
+        <h2 class="pg">Submissions to review</h2><div id="subList"></div>
+        <div id="subReview" class="panel" hidden></div>
+        <h2 class="pg">Timetable versions</h2><p class="muted">A copy is kept before every change, so you can go back.</p><div id="verList" class="scroll"></div>
+      </div>
+    </section>
+
+    <section id="vCal" hidden>
+      <div class="panel"><h2>Add an academic year</h2>
+        <form id="yrForm" class="cols"><label>Label <input id="yLabel" placeholder="2027/2028" required></label><label>Starts <input type="date" id="yStart" required></label><label>Ends <input type="date" id="yEnd" required></label>
+        <button class="btn wide" type="submit">Add year</button><p class="msg wide" id="yMsg"></p></form>
+        <p class="muted">A year that starts in the future advances cohorts automatically on its start date. A year that has already started never does.</p></div>
+      <div class="panel"><h2>Add a semester, vacation or other period</h2>
+        <form id="perForm" class="cols"><label>Year <select id="pYear"></select></label><label>Type <select id="pKind"><option>semester</option><option>vacation</option><option>registration</option><option>other</option></select></label>
+        <label>Label <input id="pLabel" required></label><label>From <input type="date" id="pFrom" required></label><label>To <input type="date" id="pTo" required></label>
+        <button class="btn wide" type="submit">Add period</button><p class="msg wide" id="pMsg"></p></form></div>
+      <div id="calResult" class="panel gold-note" hidden></div>
+      <div id="calList"></div>
+    </section>
+
+    <section id="vSec" hidden>
+      <div class="stats"><div class="stat gold"><b id="sRep">0</b><span>Open reports</span></div><div class="stat"><b id="sPet">0</b><span>Petitions</span></div><div class="stat"><b id="sSub">0</b><span>Timetables</span></div></div>
+      <div class="panel"><div class="phead"><h2>Administrators signed in</h2></div><div id="secSessions"></div></div>
+      <div class="panel"><div class="phead"><h2>Confidential reports</h2></div><div id="secReports" class="scroll"></div></div>
+      <div class="panel"><div class="phead"><h2>Petitions from the Main Admin</h2></div><div id="secPetitions" class="scroll"></div></div>
+      <div class="panel"><div class="phead"><h2>Alerts and sensitive actions</h2></div><div id="secAlerts" class="scroll"></div></div>
+      <div class="panel"><div class="phead"><h2>Backup</h2></div><p class="muted">Download a full copy of the database and keep it somewhere safe that is not this server.</p><button class="btn" id="bkDl">Download backup</button></div>
+    </section>
+
+    <section id="vRep" hidden>
+      <form id="repForm" class="panel narrow"><h2>Report a concern</h2>
+        <p class="muted">Goes privately to the Super Admin only. It is confidential, not anonymous: the Super Admin can see who sent it. The person you report is not told.</p>
+        <label>Category <select id="repCat"><option>inappropriate behaviour</option><option>misuse of the booking system</option><option>unresolved issue</option><option>suspicious activity</option></select></label>
+        <textarea id="repBody" rows="4" maxlength="1000" placeholder="Describe what happened" required></textarea>
+        <button class="btn" type="submit">Send report</button><p class="msg" id="repMsg"></p></form>
+      <h2 class="pg">Your reports</h2><div id="repList"></div>
+      <div id="petPanel" hidden>
+        <form id="petForm" class="panel narrow"><h2>Petition the Super Admin</h2>
+          <p class="muted">Ask the Super Admin to reconsider a decision. A petition changes nothing by itself.</p>
+          <label>About (optional) <input id="petRef" placeholder="e.g. booking #12"></label>
+          <textarea id="petBody" rows="3" maxlength="1000" placeholder="What should be reconsidered, and why?" required></textarea>
+          <button class="btn" type="submit">Send petition</button><p class="msg" id="petMsg"></p></form>
+        <h2 class="pg">Your petitions</h2><div id="petList"></div>
+      </div>
     </section>
 
     <section id="vAudit" hidden>

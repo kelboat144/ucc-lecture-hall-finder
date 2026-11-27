@@ -1,4 +1,4 @@
-// Shared timetable import used by the admin upload and by first-start seeding.
+// Shared timetable parsing, import, versions and restore.
 const db = require('./db');
 const DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const parseTime = (t) => { const m = /^(\d{1,2}):(\d{2})$/.exec(String(t).trim()); if (!m) return null; const v = +m[1] * 60 + +m[2]; return +m[1] < 24 && +m[2] < 60 ? v : null; };
@@ -17,12 +17,10 @@ function parseCsv(text) {
   return rows.filter((r) => r.some((c) => c.trim()));
 }
 
-// files: [{name, csv}]. Returns {imported, skipped, errors}. Writes nothing if there are errors.
-function importTimetable(files, replace) {
+// files: [{name, csv}]  ->  {errors, out: [hallId, day, start, end, course, programme], skipped}
+function parseRows(files, seen = new Set()) {
   const halls = new Map(db.prepare('SELECT id,name FROM halls').all().map((h) => [h.name.toLowerCase().replace(/\s+/g, ''), h.id]));
-  const errors = [], out = [], seen = new Set();
-  if (!replace) db.prepare('SELECT hall_id,day,start_min,end_min,course FROM classes').all().forEach((c) => seen.add([c.hall_id, c.day, c.start_min, c.end_min, c.course].join('|')));
-  let skipped = 0;
+  const errors = [], out = []; let skipped = 0;
   for (const f of files) {
     const name = String(f.name || 'file').slice(0, 60);
     const rows = parseCsv(String(f.csv || ''));
@@ -43,12 +41,38 @@ function importTimetable(files, replace) {
       }
     });
   }
-  if (errors.length) return { imported: 0, skipped, errors };
+  return { errors, out, skipped };
+}
+
+function importTimetable(files, replace) {
+  const seen = new Set();
+  if (!replace) db.prepare('SELECT hall_id,day,start_min,end_min,course FROM classes').all().forEach((c) => seen.add([c.hall_id, c.day, c.start_min, c.end_min, c.course].join('|')));
+  const r = parseRows(files, seen);
+  if (r.errors.length) return { imported: 0, skipped: r.skipped, errors: r.errors };
   db.transaction(() => {
     if (replace) db.prepare('DELETE FROM classes').run();
     const ins = db.prepare('INSERT INTO classes (hall_id,day,start_min,end_min,course,programme) VALUES (?,?,?,?,?,?)');
-    out.forEach((o) => ins.run(...o));
+    r.out.forEach((o) => ins.run(...o));
   })();
-  return { imported: out.length, skipped, errors };
+  return { imported: r.out.length, skipped: r.skipped, errors: [] };
 }
-module.exports = { importTimetable };
+
+// Versions: a full copy of the official timetable, taken before anything replaces it.
+function snapshot(note, by) {
+  const rows = db.prepare(`SELECT h.name AS hall,c.day,c.start_min AS s,c.end_min AS e,c.course,c.programme AS p FROM classes c JOIN halls h ON h.id=c.hall_id`).all();
+  const r = db.prepare('INSERT INTO timetable_versions (created,created_by,note,rows_json) VALUES (?,?,?,?)').run(Date.now(), by || 'System', note, JSON.stringify(rows));
+  db.prepare('DELETE FROM timetable_versions WHERE id NOT IN (SELECT id FROM timetable_versions ORDER BY id DESC LIMIT 40)').run();
+  return Number(r.lastInsertRowid);
+}
+function restore(id) {
+  const v = db.prepare('SELECT rows_json FROM timetable_versions WHERE id=?').get(id);
+  if (!v) return false;
+  const halls = new Map(db.prepare('SELECT id,name FROM halls').all().map((h) => [h.name, h.id]));
+  db.transaction(() => {
+    db.prepare('DELETE FROM classes').run();
+    const ins = db.prepare('INSERT INTO classes (hall_id,day,start_min,end_min,course,programme) VALUES (?,?,?,?,?,?)');
+    JSON.parse(v.rows_json).forEach((r) => halls.has(r.hall) && ins.run(halls.get(r.hall), r.day, r.s, r.e, r.course, r.p));
+  })();
+  return true;
+}
+module.exports = { parseCsv, parseRows, importTimetable, snapshot, restore };

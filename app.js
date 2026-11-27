@@ -18,7 +18,7 @@ async function api(url, method = 'GET', body) {
   let j = {}; try { j = await res.json(); } catch (e) {}
   if (res.status === 401 && url !== '/api/login') { showLogin(); throw new Error(j.error || 'Please sign in again.'); }
   if (res.status === 403 && j.must_change) { showApp(); throw new Error(j.error); }
-  if (!res.ok) { const err = new Error(j.error || 'Request failed.'); Object.assign(err, { details: j.details, retry: j.retry_after }); throw err; }
+  if (!res.ok) { const err = new Error(j.error || 'Request failed.'); Object.assign(err, { details: j.details, retry: j.retry_after, impact: j.impact }); throw err; }
   return j;
 }
 const say = (id, text, ok) => { const el = $(id); if (!el) return; el.textContent = text; el.className = 'msg' + (el.classList.contains('wide') ? ' wide' : '') + (text ? (ok ? ' ok' : ' err') : ''); };
@@ -52,7 +52,10 @@ const IC = {
   clock: 'M12 7v5l3 2M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',
   check: 'M5 13l4 4L19 7',
   swap: 'M17 3l3 3-3 3M20 6H8a4 4 0 0 0-4 4v1M7 21l-3-3 3-3M4 18h12a4 4 0 0 0 4-4v-1',
-  info: 'M12 11v5M12 8v.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z'
+  info: 'M12 11v5M12 8v.01M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z',
+  tt: 'M5 4h14v16H5zM9 4v16M5 10h14M5 15h14',
+  shield: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z',
+  flag: 'M5 21V4M5 4h11l-2 4 2 4H5'
 };
 const ic = (n, z = 20) => `<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${IC[n]}"/></svg>`;
 const ago = (ms) => { const m = Math.floor((Date.now() - ms) / 60000); return m < 1 ? 'just now' : m < 60 ? `${m}m ago` : m < 1440 ? `${Math.floor(m / 60)}h ago` : `${Math.floor(m / 1440)}d ago`; };
@@ -72,11 +75,12 @@ function showLogin() { me = null; clearInterval(pollTimer); menu(false); $('appV
 function buildNav() {
   let tabs;
   if (me.must_change) tabs = [['vAccount', 'Choose a password', 'key']];
-  else if (me.role === 'pr') tabs = [['vDash', 'Dashboard', 'home'], ['vFind', 'Search Halls', 'search'], ['vMine', 'My Bookings', 'cal'], ['vMsg', 'Messages', 'msg'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']];
+  else if (me.role === 'pr') tabs = [['vDash', 'Dashboard', 'home'], ['vFind', 'Search Halls', 'search'], ['vMine', 'My Bookings', 'cal'], ['vTT', 'Timetable', 'tt'], ['vMsg', 'Messages', 'msg'], ['vRep', 'Report a concern', 'flag'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']];
   else {
     tabs = [['vDash', 'Dashboard', 'home'], ['vFind', 'Search Halls', 'search']];
     if (me.role === 'super' || me.role === 'main') tabs.push(['vManage', 'Manage', 'manage']);
-    tabs.push(['vAudit', 'Audit Log', 'audit'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']);
+    if (me.role === 'super') tabs.push(['vTT', 'Timetables', 'tt'], ['vCal', 'Academic Calendar', 'cal'], ['vSec', 'Security', 'shield']);
+    tabs.push([ 'vRep', me.role === 'main' ? 'Report / Petition' : 'Report a concern', 'flag'], ['vAudit', 'Audit Log', 'audit'], ['vNotif', 'Notifications', 'bell'], ['vAccount', 'Account', 'user']);
   }
   $('nav').innerHTML = tabs.map(([id, t, i]) => `<button data-v="${id}" class="${id === view ? 'on' : ''}">${ic(i, 22)}<span class="nl">${t}</span><span class="nb" hidden>0</span></button>`).join('');
   Object.entries(navCounts).forEach(([v, n]) => setBadge(v, n));
@@ -99,11 +103,11 @@ function showApp() {
 function go(v) {
   if (me.must_change) v = 'vAccount';
   view = v; menu(false);
-  ['vDash', 'vFind', 'vMine', 'vMsg', 'vManage', 'vAudit', 'vNotif', 'vAccount'].forEach((id) => ($(id).hidden = id !== v));
+  ['vDash', 'vFind', 'vMine', 'vMsg', 'vManage', 'vTT', 'vCal', 'vSec', 'vRep', 'vAudit', 'vNotif', 'vAccount'].forEach((id) => ($(id).hidden = id !== v));
   $('forceBanner').hidden = !me.must_change;
   document.querySelectorAll('#nav button').forEach((b) => b.classList.toggle('on', b.dataset.v === v));
   scrollTo(0, 0);
-  ({ vFind: load, vMine: loadMine, vMsg: loadMsgs, vDash: loadDash, vManage: loadManage, vAudit: loadAudit, vNotif: loadNotif }[v] || (() => {}))();
+  ({ vFind: load, vMine: loadMine, vMsg: loadMsgs, vDash: loadDash, vManage: loadManage, vTT: loadTT, vCal: loadCal, vSec: loadSec, vRep: loadRep, vAudit: loadAudit, vNotif: loadNotif }[v] || (() => {}))();
   if (!me.must_change) api('/api/me').then((m) => setBell(m.unread)).catch(() => {});
 }
 $('nav').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) go(b.dataset.v); });
@@ -133,6 +137,7 @@ function itemsOf(h) {
     ...data.classes.filter((c) => c.hall_id === h.id && !c.released).map((c) => ({ s: c.start_min, e: c.end_min, tag: c.course })),
     ...data.moved.filter((c) => c.hall_id === h.id).map((c) => ({ s: c.start_min, e: c.end_min, tag: c.course + ' (moved)' })),
     ...data.bookings.filter((b) => b.hall_id === h.id).map((b) => ({ s: b.start_min, e: b.end_min, tag: 'Booked: ' + b.by_name })),
+    ...(data.blocks || []).filter((b) => b.hall_id === h.id).map((b) => ({ s: b.start_min, e: b.end_min, tag: 'Unavailable: ' + b.reason })),
   ].sort((a, b) => a.s - b.s);
 }
 function status(h, m) {
@@ -181,6 +186,7 @@ function detail(h, s, m) {
     }),
     ...data.moved.filter((c) => c.hall_id === h.id).map((c) => ({ s: c.start_min, e: c.end_min, html: `${esc(c.course)} <span class="chip">Moved here from ${fmtDate(c.from_date)}</span>`, btn: '', form: '' })),
     ...data.bookings.filter((b) => b.hall_id === h.id).map((b) => ({ s: b.start_min, e: b.end_min, html: `Booked by ${esc(b.by_name)} · ${esc(b.purpose)} <span class="chip">Approved</span>`, btn: '', form: '' })),
+    ...(data.blocks || []).filter((b) => b.hall_id === h.id).map((b) => ({ s: b.start_min, e: Math.min(b.end_min, 1439), html: `Unavailable: ${esc(b.reason)} <span class="chip warn">Maintenance</span>`, btn: '', form: '' })),
     ...data.pending.filter((b) => b.hall_id === h.id).map((b) => ({ s: b.start_min, e: b.end_min, html: `${esc(b.by_name)} · ${esc(b.purpose)} <span class="chip line">${b.status === 'alternative' ? 'Alternative offered' : 'Pending, not yet approved'}</span>`, btn: '', form: '' })),
   ].sort((a, b) => a.s - b.s);
   const from = s.free ? m : s.until, to = s.free ? Math.min(m + 60, s.until ?? m + 60) : s.until + 60;
@@ -224,23 +230,33 @@ $('filterBtn').addEventListener('click', () => { $('filters').hidden = !$('filte
 const STATUS = { pending: ['Pending', 'line'], approved: ['Approved', ''], rejected: ['Rejected', 'muted'], cancelled: ['Cancelled', 'muted'], alternative: ['Alternative offered', 'warn'] };
 const slot = (b) => `<b>${fmtDate(b.date)}</b> · ${hhmm(b.start_min)}–${hhmm(b.end_min)} · ${esc(b.hall)}`;
 async function loadMine() {
+  const now = new Date(), today = localDate(now), nm = now.getHours() * 60 + now.getMinutes();
   try {
     const rows = await api('/api/bookings');
-    $('mine').innerHTML = rows.length ? rows.map((b) => `<div class="item"><div class="l1">${slot(b)}</div><div class="l2">${esc(b.purpose)}</div>
-      <div class="l3"><span class="chip ${STATUS[b.status][1]}">${STATUS[b.status][0]}</span>${b.cancel_req ? '<span class="chip warn">Cancellation requested</span>' : ''}</div>
+    $('mine').innerHTML = rows.length ? rows.map((b) => {
+      const live = b.status === 'approved' && b.date === today && b.start_min <= nm && nm < b.end_min;
+      return `<div class="item"><div class="l1">${slot(b)}</div><div class="l2">${esc(b.purpose)}</div>
+      <div class="l3"><span class="chip ${STATUS[b.status][1]}">${STATUS[b.status][0]}</span>${b.cancel_req ? '<span class="chip warn">Cancellation requested</span>' : ''}${b.ext_end ? `<span class="chip line">Extension to ${hhmm(b.ext_end)} requested</span>` : ''}${b.release_req ? '<span class="chip line">Early release reported</span>' : ''}${b.alt_state === 'accepted' ? '<span class="chip line">Replacement awaiting approval</span>' : ''}</div>
       ${b.decision_reason && ['rejected', 'approved', 'alternative', 'cancelled'].includes(b.status) ? `<div class="reply">Admin: ${esc(b.decision_reason)}</div>` : ''}
       ${b.status === 'alternative' ? `<div class="reply">Proposed instead: <b>${fmtDate(b.alt_date)} · ${hhmm(b.alt_start)}–${hhmm(b.alt_end)} · ${esc(b.alt_hall_name)}</b></div>` : ''}
+      ${b.alt_state === 'offered' ? `<div class="reply"><b>Your hall is unavailable</b> (${esc(b.maint_note)}). Your booking is kept. Suggested replacement: <b>${esc(b.alt_hall_name)}</b>.</div>` : ''}
       <div class="acts">${b.status === 'alternative' ? `<button class="mini" data-resp="1" data-id="${b.id}">Accept alternative</button><button class="mini" data-resp="0" data-id="${b.id}">Decline</button>` : ''}
+      ${b.alt_state === 'offered' ? `<button class="mini" data-mresp="1" data-id="${b.id}">Accept replacement</button><button class="mini" data-mresp="0" data-id="${b.id}">Decline</button>` : ''}
       ${b.status === 'pending' ? `<button class="mini" data-cancel="${b.id}">Withdraw request</button>` : ''}
-      ${b.status === 'approved' && !b.cancel_req ? `<button class="mini" data-cancel="${b.id}">Ask to cancel</button>` : ''}</div></div>`).join('')
-      : '<div class="empty">No booking requests yet. Open a hall in Find a hall and tap Send request.</div>';
+      ${b.status === 'approved' && !b.cancel_req ? `<button class="mini" data-cancel="${b.id}">Ask to cancel</button>` : ''}
+      ${b.status === 'approved' && !b.ext_end ? `<button class="mini" data-ext="${b.id}">Ask for more time</button>` : ''}
+      ${live && !b.release_req ? `<button class="mini" data-vac="${b.id}">We have left (release early)</button>` : ''}</div></div>`;
+    }).join('') : '<div class="empty">No booking requests yet. Open a hall in Search Halls and tap Send request.</div>';
   } catch (e) { $('mine').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
 }
 $('mine').addEventListener('click', async (e) => {
   const d = e.target.dataset;
   try {
     if (d.resp !== undefined) await api(`/api/bookings/${d.id}/respond`, 'POST', { accept: d.resp === '1' });
+    else if (d.mresp !== undefined) await api(`/api/bookings/${d.id}/maint-response`, 'POST', { accept: d.mresp === '1' });
     else if (d.cancel) { const r = ask('Reason (needed for approved bookings):'); if (r === null) return; await api(`/api/bookings/${d.cancel}/cancel`, 'POST', { reason: r }); }
+    else if (d.ext) { const t = ask('New end time (HH:MM):'); if (!t) return; const r = ask('Why do you need more time?'); if (!r) return; const x = await api(`/api/bookings/${d.ext}/extend`, 'POST', { new_end: t, reason: r }); if (x.conflict) alert('Sent, but note: ' + x.conflict + ' The timetable and other bookings come first.'); }
+    else if (d.vac) { if (!confirm('Tell the admin this hall is now empty so it can be released?')) return; await api(`/api/bookings/${d.vac}/vacated`, 'POST', {}); }
     else return;
     loadMine();
   } catch (err) { alert(err.message); }
@@ -278,7 +294,7 @@ function renderActivity(list) {
 async function loadDash() {
   const rep = me.role === 'pr';
   setHero(); prepQuick();
-  ['dBookPanel', 'dMsgPanel'].forEach((id) => ($(id).hidden = rep));
+  ['dBookPanel', 'dMsgPanel', 'dMaintPanel'].forEach((id) => ($(id).hidden = rep));
   $('dViewAll').hidden = !rep;
   $('dChgTitle').textContent = rep ? 'Class changes (today)' : 'Class changes (today onwards)';
   try { rep ? await loadRepDash() : await loadStaffDash(); }
@@ -308,6 +324,7 @@ async function loadRepDash() {
   renderActivity(notes);
 }
 async function loadStaffDash() {
+  loadMaint();
   const [ov, bk, notes] = await Promise.all([api('/api/admin/overview'), has('bookings.view') || has('bookings.decide') ? api('/api/bookings').catch(() => []) : [], api('/api/notifications').catch(() => [])]);
   const pend = bk.filter((b) => b.status === 'pending' || b.status === 'alternative'), appr = bk.filter((b) => b.status === 'approved');
   $('dPend').textContent = pend.length; $('dBook').textContent = appr.length; $('dChg').textContent = ov.changes.length; $('dMsgCnt').textContent = has('messages.handle') ? ov.unread || 0 : 0;
@@ -315,8 +332,9 @@ async function loadStaffDash() {
   $('dPendList').innerHTML = pend.length ? pend.map((b) => brow(b, `${esc(b.purpose)} <small>${esc(b.by_name)} · ${esc(b.programme)} · ${age(b.created)}</small>`,
     b.status === 'pending' && has('bookings.decide') ? `<button class="btn sm" data-dec="approve" data-id="${b.id}">Approve</button><button class="btn sm ghost" data-dec="reject" data-id="${b.id}">Reject</button><button class="btn sm ghost" data-dec="alternative" data-id="${b.id}" data-hall="${esc(b.hall)}" data-date="${b.date}" data-s="${hhmm(b.start_min)}" data-e="${hhmm(b.end_min)}">Suggest alternative</button>` : '')).join('')
     : infoBox(has('bookings.view') ? 'No requests waiting.' : 'You have not been given access to booking requests.');
-  $('dBookList').innerHTML = appr.length ? appr.map((b) => brow(b, `${esc(b.purpose)} <small>${esc(b.by_name)}</small>${b.cancel_req ? ` <span class="pill warn">Cancellation requested: ${esc(b.cancel_req)}</span>` : ''}`,
-    has('bookings.cancel') ? `<button class="btn sm ghost" data-cancel="${b.id}">${b.cancel_req ? 'Confirm cancellation' : 'Cancel booking'}</button>` : '')).join('') : infoBox('No approved bookings.');
+  $('dBookList').innerHTML = appr.length ? appr.map((b) => brow(b,
+    `${esc(b.purpose)} <small>${esc(b.by_name)}</small>${b.cancel_req ? ` <span class="pill warn">Cancellation requested: ${esc(b.cancel_req)}</span>` : ''}${b.ext_end ? ` <span class="pill ${b.ext_conflict ? 'warn' : 'pend'}">Extension to ${hhmm(b.ext_end)}${b.ext_conflict ? ' · CONFLICT: ' + esc(b.ext_conflict) : ''}</span>` : ''}${b.release_req ? ' <span class="pill warn">Reported empty</span>' : ''}${b.alt_state === 'accepted' ? ` <span class="pill warn">Replacement awaiting approval: ${esc(b.alt_hall_name)}</span>` : ''}${b.alt_state === 'offered' ? ' <span class="pill pend">Replacement offered to rep</span>' : ''}`,
+    `${has('bookings.decide') && b.ext_end ? `<button class="btn sm" data-ext="1" data-id="${b.id}">Approve extension</button><button class="btn sm ghost" data-ext="0" data-id="${b.id}">Reject extension</button>` : ''}${has('bookings.decide') && b.alt_state === 'accepted' ? `<button class="btn sm" data-mnt="1" data-id="${b.id}">Approve replacement</button><button class="btn sm ghost" data-mnt="0" data-id="${b.id}">Reject</button>` : ''}${has('bookings.cancel') && b.release_req ? `<button class="btn sm" data-rel="${b.id}">Confirm early release</button>` : ''}${has('bookings.cancel') ? `<button class="btn sm ghost" data-cancel="${b.id}">${b.cancel_req ? 'Confirm cancellation' : 'Cancel booking'}</button>` : ''}`)).join('') : infoBox('No approved bookings.');
   $('dChgList').innerHTML = ov.changes.length ? ov.changes.map((c) => crow({ date: c.date, s: c.start_min, e: c.end_min, hall: c.hall, course: c.course, prog: c.programme, chip: changeChip(c), by: c.by_name || 'unknown' })).join('') : infoBox('No class changes yet.');
   renderActivity(notes);
   $('dMsgPanel').hidden = !has('messages.handle');
@@ -363,6 +381,10 @@ $('vDash').addEventListener('click', async (e) => {
       }
       await api(`/api/bookings/${d.id}/decision`, 'POST', body);
     } else if (d.cancel) { const r = ask('Reason for cancelling (required):'); if (!r) return; await api(`/api/bookings/${d.cancel}/cancel`, 'POST', { reason: r }); }
+    else if (d.ext) { const r = ask(d.ext === '1' ? 'Reason for approving the extension:' : 'Reason for rejecting the extension:'); if (!r) return; await api(`/api/bookings/${d.id}/extension`, 'POST', { approve: d.ext === '1', reason: r }); }
+    else if (d.mnt) { const r = ask(d.mnt === '1' ? 'Reason for approving the replacement hall:' : 'Reason for rejecting it:'); if (!r) return; await api(`/api/bookings/${d.id}/maint-decision`, 'POST', { approve: d.mnt === '1', reason: r }); }
+    else if (d.rel) { const r = ask('How do you know the hall is empty? (required)'); if (!r) return; await api(`/api/bookings/${d.rel}/release`, 'POST', { reason: r }); }
+    else if (d.bclear) { const r = ask('Reason for restoring the hall:'); if (!r) return; await api(`/api/hall-blocks/${d.bclear}/clear`, 'POST', { reason: r }); }
     else if (d.read) await api(`/api/messages/${d.read}/read`, 'POST');
     else if (d.reply) { const t = ask('Your reply:'); if (!t) return; await api(`/api/messages/${d.reply}/reply`, 'POST', { text: t }); }
     else return;
@@ -464,7 +486,7 @@ async function loadAudit() {
 $('aGo').addEventListener('click', loadAudit);
 
 // ---------- notifications ----------
-const LINKS = { dash: 'vDash', mine: 'vMine', msg: 'vMsg', audit: 'vAudit' };
+const LINKS = { dash: 'vDash', mine: 'vMine', msg: 'vMsg', audit: 'vAudit', tt: 'vTT', cal: 'vCal', sec: 'vSec' };
 async function loadNotif() {
   try {
     const [list, prefs] = await Promise.all([api('/api/notifications'), api('/api/notif-prefs')]);
@@ -498,6 +520,159 @@ $('pwForm').addEventListener('submit', async (e) => {
     await api('/api/password', 'POST', { current: $('pc').value, next: $('pn').value }); $('pwForm').reset(); $('pwBar').style.width = '0';
     if (me.must_change) { me.must_change = 0; $('bellBtn').hidden = false; showApp(); } else say('pwMsg', 'Password updated.', true);
   } catch (err) { say('pwMsg', err.message); }
+});
+
+// ---------- hall maintenance (admins with the halls permission) ----------
+async function loadMaint() {
+  $('dMaintPanel').hidden = !has('halls.manage'); if (!has('halls.manage')) return;
+  try {
+    const bl = await api('/api/hall-blocks');
+    $('dMaintList').innerHTML = bl.length ? bl.map((b) => `<div class="item"><div class="l1"><b>${esc(b.hall)}</b> unavailable</div><div class="l2">${b.start_at.replace('T', ' ')} → ${b.end_at ? b.end_at.replace('T', ' ') : 'until cleared'} <small>${esc(b.reason)}</small></div>
+      <div class="acts"><button class="mini" data-bclear="${b.id}">Restore hall</button></div></div>`).join('') : infoBox('No halls are marked unavailable.');
+  } catch (e) { $('dMaintList').innerHTML = infoBox(esc(e.message)); }
+}
+$('mForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try {
+    const r = await api('/api/hall-blocks', 'POST', { hall: $('mHall').value, start_at: $('mFrom').value, end_at: $('mTo').value || null, reason: $('mWhy').value });
+    $('mForm').reset(); say('mMsg', `Done. ${r.affected} existing booking(s) affected. Those reps were told and offered a replacement hall; nothing was cancelled.`, true); loadMaint();
+  } catch (err) { say('mMsg', err.message); }
+});
+$('dMaintList').addEventListener('click', async (e) => {
+  const id = e.target.dataset.bclear; if (!id) return;
+  const r = ask('Reason for restoring the hall:'); if (!r) return;
+  try { await api(`/api/hall-blocks/${id}/clear`, 'POST', { reason: r }); loadMaint(); } catch (err) { alert(err.message); }
+});
+
+// ---------- timetables: submit (rep) and review + versions (Super Admin) ----------
+const DN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+async function loadTT() {
+  $('ttPr').hidden = me.role !== 'pr'; $('ttSuper').hidden = me.role !== 'super'; $('subReview').hidden = true;
+  try {
+    if (me.role === 'pr') {
+      $('myProg').textContent = me.programme;
+      const [t, s] = await Promise.all([api('/api/my-timetable'), api('/api/timetable/submissions')]);
+      $('myTT').innerHTML = t.length ? t.map((x) => `<div class="ln"><span><span class="t">${DN[x.day]} ${hhmm(x.start_min)}–${hhmm(x.end_min)}</span>${esc(x.course)}</span><small>${esc(x.hall)}</small></div>`).join('') : infoBox('Your programme has no official timetable yet.');
+      $('tsList').innerHTML = s.length ? s.map((x) => `<div class="item"><div class="l1">${esc(x.filename || 'file')} · ${x.row_count} rows <small>${when(x.created)}</small></div><div class="l3"><span class="chip ${x.status === 'approved' ? '' : x.status === 'pending' ? 'line' : 'muted'}">${x.status === 'pending' ? 'Waiting for the Super Admin' : x.status}</span></div>${x.reason ? `<div class="reply">${esc(x.reason)}</div>` : ''}</div>`).join('') : infoBox('Nothing submitted yet.');
+    } else {
+      const [s, v] = await Promise.all([api('/api/timetable/submissions'), api('/api/timetable/versions')]);
+      $('subList').innerHTML = s.length ? s.map((x) => `<div class="item"><div class="l1"><b>${esc(x.programme)}</b> · ${x.row_count} rows <small>${esc(x.by_name)} · ${when(x.created)}</small></div>
+        <div class="l3"><span class="chip ${x.status === 'pending' ? 'warn' : 'muted'}">${x.status}</span>${x.report.length ? `<span class="chip warn">${x.report.length} conflict(s)</span>` : ''}</div>${x.reason ? `<div class="reply">${esc(x.reason)}</div>` : ''}
+        ${x.status === 'pending' ? `<div class="acts"><button class="mini" data-review="${x.id}">Review</button></div>` : ''}</div>`).join('') : '<div class="empty">Nothing to review.</div>';
+      $('verList').innerHTML = v.length ? v.map((x) => `<div class="item"><div class="l1"><b>#${x.id}</b> · ${when(x.created)} · ${x.n} classes</div><div class="l2"><small>${esc(x.note)} · by ${esc(x.created_by)}</small></div><div class="acts"><button class="mini" data-restore="${x.id}">Restore this version</button></div></div>`).join('') : infoBox('No versions yet. One is saved before the first change.');
+    }
+  } catch (e) { (me.role === 'pr' ? $('myTT') : $('subList')).innerHTML = infoBox(esc(e.message)); }
+}
+$('tsGo').addEventListener('click', async () => {
+  const f = $('tsFile').files[0]; if (!f) return say('tsMsg', 'Choose a CSV file first.');
+  try { const r = await api('/api/timetable/submissions', 'POST', { name: f.name, csv: await f.text() }); say('tsMsg', `Submitted ${r.rows} rows. The Super Admin will review them.`, true); $('tsFile').value = ''; loadTT(); }
+  catch (err) { say('tsMsg', err.message + (err.details ? ' ' + err.details.join(' ') : '')); }
+});
+$('ttSuper').addEventListener('click', async (e) => {
+  const d = e.target.dataset;
+  try {
+    if (d.review) {
+      const p = await api('/api/timetable/submissions/' + d.review);
+      $('subReview').hidden = false;
+      $('subReview').innerHTML = `<h2>${esc(p.programme)}: ${p.total} rows</h2><p class="muted">Publishing replaces only this programme's ${p.replaces} existing classes. A copy of the current timetable is saved first.</p>
+        ${p.conflicts.length ? `<div class="reply"><b>${p.conflicts.length} conflict(s):</b><br>${p.conflicts.map(esc).join('<br>')}</div>` : '<p class="msg ok">No conflicts found.</p>'}
+        <div class="scroll" style="max-height:220px">${p.rows.map((r) => `<div class="ln"><span><span class="t">${r[1]} ${r[2]}–${r[3]}</span>${esc(r[4])}</span><small>${esc(r[0])}</small></div>`).join('')}</div>
+        <div class="acts"><button class="btn" data-decide="approve" data-id="${d.review}" data-n="${p.conflicts.length}">Approve and publish</button><button class="btn ghost" data-decide="reject" data-id="${d.review}">Reject</button></div>`;
+      $('subReview').scrollIntoView({ behavior: 'smooth' });
+    } else if (d.decide) {
+      const force = d.decide === 'approve' && +d.n > 0;
+      if (force && !confirm(`${d.n} conflict(s) were found. Publish anyway? Existing approved bookings are kept and flagged, not deleted.`)) return;
+      const r = ask(d.decide === 'approve' ? 'Reason for approving:' : 'Reason for rejecting:'); if (!r) return;
+      await api(`/api/timetable/submissions/${d.id}/decision`, 'POST', { decision: d.decide, reason: r, force }); loadTT();
+    } else if (d.restore) {
+      const r = ask(`Restore version #${d.restore}? This replaces the whole official timetable (a copy of the current one is saved first). Reason:`); if (!r) return;
+      await api(`/api/timetable/versions/${d.restore}/restore`, 'POST', { reason: r }); alert('Restored.'); loadTT();
+    }
+  } catch (err) { alert(err.message); }
+});
+
+// ---------- academic calendar + yearly transition (Super Admin) ----------
+async function loadCal() {
+  try {
+    const ys = await api('/api/calendar');
+    $('pYear').innerHTML = ys.map((y) => `<option value="${y.id}">${esc(y.label)}</option>`).join('');
+    $('calList').innerHTML = ys.length ? ys.map((y) => `<div class="item"><div class="l1"><b>${esc(y.label)}</b> <small>${fmtDate(y.start_date)} → ${fmtDate(y.end_date)}</small></div>
+      <div class="l3"><span class="chip ${y.state === 'upcoming' ? 'line' : y.state === 'current' ? '' : 'muted'}">${y.state}</span>${y.state === 'upcoming' && y.auto ? '<small>Cohorts advance automatically on the start date</small>' : ''}${y.transitioned_at ? `<small>Cohorts advanced ${when(y.transitioned_at)}</small>` : ''}</div>
+      ${y.periods.map((p) => `<div class="ln"><span><span class="t">${esc(p.kind)}</span>${esc(p.label)} <small>${fmtDate(p.start_date)} → ${fmtDate(p.end_date)}</small></span><button class="mini" data-delper="${p.id}">Remove</button></div>`).join('')}
+      <div class="acts"><button class="mini" data-yedit="${y.id}" data-s="${y.start_date}" data-e="${y.end_date}">Change dates</button>${y.transitioned_at ? '' : `<button class="mini" data-trans="${y.id}" data-l="${esc(y.label)}">Run year change now</button>`}</div></div>`).join('') : '<div class="empty">No academic years yet.</div>';
+  } catch (e) { $('calList').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+$('yrForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try { const r = await api('/api/calendar/years', 'POST', { label: $('yLabel').value, start_date: $('yStart').value, end_date: $('yEnd').value }); $('yrForm').reset(); say('yMsg', r.auto_transition ? 'Added. Cohorts will advance automatically on the start date.' : 'Added. This year has already started, so nothing advances automatically.', true); loadCal(); } catch (err) { say('yMsg', err.message); }
+});
+$('perForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try { await api('/api/calendar/periods', 'POST', { year_id: +$('pYear').value, kind: $('pKind').value, label: $('pLabel').value, start_date: $('pFrom').value, end_date: $('pTo').value }); $('perForm').reset(); say('pMsg', 'Added.', true); loadCal(); } catch (err) { say('pMsg', err.message); }
+});
+$('calList').addEventListener('click', async (e) => {
+  const d = e.target.dataset;
+  try {
+    if (d.delper) { if (!confirm('Remove this period?')) return; await api('/api/calendar/periods/' + d.delper, 'DELETE'); }
+    else if (d.yedit) {
+      const s = ask('Start date (YYYY-MM-DD):', d.s); if (!s) return; const en = ask('End date (YYYY-MM-DD):', d.e); if (!en) return;
+      try { await api('/api/calendar/years/' + d.yedit, 'PATCH', { start_date: s, end_date: en }); }
+      catch (err) { if (!err.impact) throw err; if (!confirm(err.impact + '\n\nApply the change anyway?')) return; await api('/api/calendar/years/' + d.yedit, 'PATCH', { start_date: s, end_date: en, confirm: true }); }
+    } else if (d.trans) {
+      const c = ask(`This advances EVERY cohort one level, retires Level 400 accounts and creates new Level 100 accounts for ${d.l}. It can only run once. Type RUN to confirm:`); if (c !== 'RUN') return;
+      const r = await api(`/api/calendar/years/${d.trans}/transition`, 'POST', { confirm: 'RUN' });
+      $('calResult').hidden = false;
+      $('calResult').innerHTML = `<b>Year change done.</b> Copy these new Level 100 logins now. Passwords are shown only once. Give them to the Departmental Heads.<pre>${r.created.map((a) => `${a.username}   ${a.temp_password}   (${a.programme})`).join('\n') || 'No new accounts were needed.'}</pre>${r.skipped.length ? `<p>Check by hand (no level found): ${r.skipped.join(', ')}</p>` : ''}<p class="muted">The previous timetable stays active until you publish the new one.</p>`;
+    } else return;
+    loadCal();
+  } catch (err) { alert(err.message); }
+});
+
+// ---------- Super Admin security dashboard ----------
+async function loadSec() {
+  try {
+    const [s, rs, ps] = await Promise.all([api('/api/security'), api('/api/reports'), api('/api/petitions')]);
+    $('sRep').textContent = s.counts.reports; $('sPet').textContent = s.counts.petitions; $('sSub').textContent = s.counts.submissions;
+    $('secSessions').innerHTML = s.sessions.length ? s.sessions.map((x) => `<div class="item"><div class="l1"><b>${esc(x.name)}</b> <small>${ROLE[x.role]}</small></div><div class="l2"><small>${esc(x.device || 'unknown device')}${x.last_seen ? ' · last active ' + when(x.last_seen) : ''}</small></div>
+      <div class="l3"><span class="chip ${x.working ? '' : 'muted'}">${x.working ? 'Working now' : 'Session open, idle'}</span></div>
+      ${x.role !== 'super' ? `<div class="acts"><button class="mini" data-freeze="${x.user_id}">Freeze</button><button class="mini" data-revoke="${x.user_id}">Sign out</button></div>` : ''}</div>`).join('') : infoBox('No administrators are signed in.');
+    $('secReports').innerHTML = rs.length ? rs.map((r) => `<div class="item ${r.status === 'resolved' ? '' : 'unread'}"><div class="l1"><b>${esc(r.category)}</b> <small>from ${esc(r.by_name)} (${ROLE[r.by_role]}) · ${when(r.created)}</small></div><div class="l2">${esc(r.body)}</div>
+      ${r.findings ? `<div class="reply">Findings: ${esc(r.findings)}</div>` : ''}<div class="l3"><span class="chip ${r.status === 'resolved' ? 'muted' : 'warn'}">${r.status}</span></div>
+      ${r.status !== 'resolved' ? `<div class="acts"><button class="mini" data-rep="investigating" data-id="${r.id}">Investigating</button><button class="mini" data-rep="resolved" data-id="${r.id}">Resolve</button></div>` : ''}</div>`).join('') : infoBox('No reports.');
+    $('secPetitions').innerHTML = ps.length ? ps.map((p) => `<div class="item ${p.status === 'open' ? 'unread' : ''}"><div class="l1"><b>${esc(p.ref || 'General')}</b> <small>from ${esc(p.by_name)} · ${when(p.created)}</small></div><div class="l2">${esc(p.body)}</div>${p.response ? `<div class="reply">Your response: ${esc(p.response)}</div>` : ''}
+      ${p.status === 'open' ? `<div class="acts"><button class="mini" data-pet="1" data-id="${p.id}">Accept</button><button class="mini" data-pet="0" data-id="${p.id}">Decline</button></div>` : `<div class="l3"><span class="chip muted">${p.status}</span></div>`}</div>`).join('') : infoBox('No petitions.');
+    $('secAlerts').innerHTML = s.alerts.length ? s.alerts.map((a) => `<div class="item"><div class="l1"><b>${esc(a.action.replace(/_/g, ' '))}</b> <span class="chip ${a.severity === 'critical' ? 'warn' : 'muted'}">${a.severity}</span></div><div class="l2">${esc(a.target)} <small>${esc(a.actor_name)} · ${when(a.created)}</small></div>${a.reason ? `<div class="reply">${esc(a.reason)}</div>` : ''}</div>`).join('') : infoBox('No alerts.');
+  } catch (e) { $('secSessions').innerHTML = infoBox(esc(e.message)); }
+}
+$('vSec').addEventListener('click', async (e) => {
+  const d = e.target.dataset;
+  try {
+    if (d.freeze) { const r = ask('Reason for freezing (not a finding of misconduct):'); if (!r) return; await api(`/api/users/${d.freeze}/status`, 'POST', { status: 'frozen', reason: r }); }
+    else if (d.revoke) { const r = ask('Reason for signing this account out:'); if (!r) return; await api(`/api/users/${d.revoke}/revoke`, 'POST', { reason: r }); }
+    else if (d.rep) { const f = ask('Findings or notes:'); if (f === null) return; await api(`/api/reports/${d.id}/update`, 'POST', { status: d.rep, findings: f }); }
+    else if (d.pet) { const r = ask('Your response:'); if (!r) return; await api(`/api/petitions/${d.id}/decide`, 'POST', { accept: d.pet === '1', response: r }); }
+    else return;
+    loadSec();
+  } catch (err) { alert(err.message); }
+});
+$('bkDl').addEventListener('click', () => { location.href = '/api/backup'; });
+
+// ---------- confidential report (everyone) + petition (Main Admin) ----------
+async function loadRep() {
+  $('petPanel').hidden = me.role !== 'main';
+  try {
+    const rs = await api('/api/reports');
+    $('repList').innerHTML = rs.length ? rs.map((r) => `<div class="item"><div class="l1">${esc(r.category)} <small>${when(r.created)}</small></div><div class="l3"><span class="chip ${r.status === 'resolved' ? 'muted' : 'line'}">${r.status}</span></div></div>`).join('') : '<div class="empty">You have not sent any reports.</div>';
+    if (me.role === 'main') { const ps = await api('/api/petitions'); $('petList').innerHTML = ps.length ? ps.map((p) => `<div class="item"><div class="l1"><b>${esc(p.ref || 'General')}</b> <span class="chip ${p.status === 'open' ? 'line' : 'muted'}">${p.status}</span></div><div class="l2">${esc(p.body)}</div>${p.response ? `<div class="reply">Super Admin: ${esc(p.response)}</div>` : ''}</div>`).join('') : '<div class="empty">No petitions.</div>'; }
+  } catch (e) { $('repList').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+$('repForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try { await api('/api/reports', 'POST', { category: $('repCat').value, body: $('repBody').value }); $('repForm').reset(); say('repMsg', 'Sent privately to the Super Admin.', true); loadRep(); } catch (err) { say('repMsg', err.message); }
+});
+$('petForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  try { await api('/api/petitions', 'POST', { ref: $('petRef').value, body: $('petBody').value }); $('petForm').reset(); say('petMsg', 'Sent to the Super Admin.', true); loadRep(); } catch (err) { say('petMsg', err.message); }
 });
 
 // ---------- start ----------
